@@ -41,7 +41,7 @@ Remember your username — it becomes part of every app URL.
 5. Click **Create repository**
 
 ### Step 3 — Upload Your HTML File
-1. Inside your new repository, click **Add file** → **Upload files**
+1. Inside your new repository, click **Add file** → **Create** or **Upload files**
 2. Create an index.html copy and paste your html body then select Commit
 3. Or -Method 4
 4. Rename your HTML file to **`index.html`** before uploading
