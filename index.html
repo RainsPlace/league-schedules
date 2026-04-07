@@ -146,15 +146,31 @@ header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); fon
 .updated-time { font-size:.75rem; color:var(--text-muted); margin-top:5px; font-style:italic; }
 .countdown    { font-size:.68rem; color:var(--text-muted); font-family:'Cinzel',serif; letter-spacing:.08em; margin-top:3px; }
 
-/* ── TAB NAV ── */
-.tab-nav { display:flex; background:var(--bg-dark); border-bottom:2px solid var(--border); overflow-x:auto; scrollbar-width:thin; }
-.tab-nav::-webkit-scrollbar { height:3px; }
-.tab-nav::-webkit-scrollbar-track { background:var(--bg-dark); }
-.tab-nav::-webkit-scrollbar-thumb { background:var(--border); }
-.tab-btn { font-family:'Cinzel',serif; font-size:.68rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:13px 20px; cursor:pointer; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; background:transparent; color:var(--text-dim); transition:all .2s; white-space:nowrap; display:flex; align-items:center; gap:5px; }
-.tab-btn:hover { color:var(--rain-light); }
-.tab-btn.active { color:var(--rain-light); border-bottom-color:var(--rain); background:rgba(58,154,189,.07); }
-.tab-icon { font-size:.9rem; }
+/* ── APP LAYOUT (sidebar + main) ── */
+.app-layout { display:flex; align-items:flex-start; }
+.main-content { flex:1; min-width:0; }
+
+/* ── SIDEBAR ── */
+.sidebar { width:182px; min-width:182px; flex-shrink:0; background:var(--bg-card); border-right:2px solid var(--border); position:sticky; top:0; height:100vh; overflow-y:auto; padding:8px 0 24px; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+.sidebar::-webkit-scrollbar { width:3px; }
+.sidebar::-webkit-scrollbar-track { background:transparent; }
+.sidebar::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+.sidebar-section-label { font-family:'Cinzel',serif; font-size:.52rem; font-weight:700; letter-spacing:.2em; color:var(--text-muted); padding:14px 14px 5px; text-transform:uppercase; border-top:1px solid var(--border); margin-top:6px; }
+.sidebar-section-label:first-child { border-top:none; margin-top:0; padding-top:8px; }
+.stab { display:flex; align-items:center; gap:7px; width:100%; padding:9px 14px; font-family:'Cinzel',serif; font-size:.63rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase; background:transparent; color:var(--text-dim); border:none; border-left:3px solid transparent; cursor:pointer; transition:all .18s; text-align:left; white-space:nowrap; }
+.stab:hover { color:var(--rain-light); background:rgba(58,154,189,.07); }
+.stab.active { color:var(--rain-light); border-left-color:var(--rain); background:rgba(58,154,189,.11); }
+.stab-icon { font-size:.88rem; }
+
+/* ── MOBILE BAR ── */
+.mob-bar { display:none; align-items:center; gap:12px; padding:9px 14px; background:var(--bg-card); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50; }
+.hamburger { background:transparent; border:1px solid var(--border); border-radius:6px; color:var(--text-dim); font-size:1.15rem; padding:5px 10px; cursor:pointer; line-height:1; transition:all .2s; }
+.hamburger:hover { color:var(--rain-light); border-color:var(--rain-dim); }
+.mob-title { font-family:'Cinzel',serif; font-size:.7rem; font-weight:700; letter-spacing:.12em; color:var(--rain-light); text-transform:uppercase; }
+
+/* ── SIDEBAR OVERLAY (mobile) ── */
+.sidebar-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:100; }
+.sidebar-overlay.visible { display:block; }
 
 /* ── STATUS FILTER BAR ── */
 .filter-bar { display:flex; align-items:center; gap:8px; padding:11px 18px; background:var(--bg-card); border-bottom:1px solid var(--border); overflow-x:auto; flex-wrap:wrap; }
@@ -237,9 +253,13 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
 .fr { color:var(--rain-dim); letter-spacing:.3em; display:block; margin-bottom:4px; }
 
 /* ── RESPONSIVE ── */
+@media(max-width:768px) {
+  .mob-bar { display:flex; }
+  .sidebar { position:fixed; top:0; left:-200px; height:100vh; z-index:110; width:200px; min-width:200px; transition:left .25s ease; padding-top:12px; }
+  .sidebar.open { left:0; box-shadow:4px 0 24px rgba(0,0,0,.7); }
+}
 @media(max-width:640px) {
   .cards-grid { grid-template-columns:1fr; padding:12px; }
-  .tab-btn { padding:12px 14px; font-size:.62rem; }
   header h1 { letter-spacing:.06em; }
 }
 </style>
@@ -292,24 +312,43 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   <div class="countdown" id="countdownEl"></div>
 </header>
 
-<!-- ══ TAB NAV ══════════════════════════════════════════════ -->
-<div class="tab-nav">
-  <button class="tab-btn active" id="tab-newyork"       onclick="switchTab('newyork')"><span class="tab-icon">🗽</span>NEW YORK</button>
-  <button class="tab-btn"        id="tab-seattle"       onclick="switchTab('seattle')"><span class="tab-icon">☕</span>SEATTLE</button>
-  <button class="tab-btn"        id="tab-chicago"       onclick="switchTab('chicago')"><span class="tab-icon">🌆</span>CHICAGO</button>
-  <button class="tab-btn"        id="tab-london"        onclick="switchTab('london')"><span class="tab-icon">🇬🇧</span>LONDON</button>
-  <button class="tab-btn"        id="tab-sydney"        onclick="switchTab('sydney')"><span class="tab-icon">🦘</span>SYDNEY</button>
-  <button class="tab-btn"        id="tab-zaf"           onclick="switchTab('zaf')"><span class="tab-icon">🌍</span>ZAF/SWE/NLD/DEU</button>
-  <button class="tab-btn"        id="tab-deutschland"   onclick="switchTab('deutschland')"><span class="tab-icon">🇩🇪</span>DEUTSCHLAND</button>
-  <button class="tab-btn"        id="tab-espanol"       onclick="switchTab('espanol')"><span class="tab-icon">🌵</span>ESPAÑOL</button>
-  <button class="tab-btn"        id="tab-francais"      onclick="switchTab('francais')"><span class="tab-icon">⚜</span>FRANÇAIS</button>
-  <button class="tab-btn"        id="tab-announcements" onclick="switchTab('announcements')"><span class="tab-icon">📢</span>ANNOUNCEMENTS</button>
-  <button class="tab-btn"        id="tab-nw"            onclick="switchTab('nw')"><span class="tab-icon">⚔</span>NW LEAGUE</button>
-  <button class="tab-btn"        id="tab-wwwh"          onclick="switchTab('wwwh')"><span class="tab-icon">🐴</span>WWWH LEAGUE</button>
-  <button class="tab-btn"        id="tab-eb"            onclick="switchTab('eb')"><span class="tab-icon">🌅</span>EB LEAGUE</button>
-  <button class="tab-btn"        id="tab-li"            onclick="switchTab('li')"><span class="tab-icon">🏆</span>LI LEAGUE</button>
-  <button class="tab-btn"        id="tab-links"         onclick="switchTab('links')"><span class="tab-icon">🔗</span>LINKS</button>
+<!-- ══ MOBILE TOP BAR ════════════════════════════════════════ -->
+<div class="mob-bar">
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">☰</button>
+  <span class="mob-title" id="mobTitle">NEW YORK</span>
 </div>
+
+<!-- ══ APP LAYOUT ════════════════════════════════════════════ -->
+<div class="app-layout">
+
+<!-- ── SIDEBAR NAV ─────────────────────────────────────────── -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-section-label">Calendars</div>
+  <button class="stab active" id="tab-newyork"     onclick="switchTab('newyork')"><span class="stab-icon">🗽</span>New York</button>
+  <button class="stab"        id="tab-seattle"     onclick="switchTab('seattle')"><span class="stab-icon">☕</span>Seattle</button>
+  <button class="stab"        id="tab-chicago"     onclick="switchTab('chicago')"><span class="stab-icon">🌆</span>Chicago</button>
+  <button class="stab"        id="tab-london"      onclick="switchTab('london')"><span class="stab-icon">🇬🇧</span>London</button>
+  <button class="stab"        id="tab-sydney"      onclick="switchTab('sydney')"><span class="stab-icon">🦘</span>Sydney</button>
+  <button class="stab"        id="tab-zaf"         onclick="switchTab('zaf')"><span class="stab-icon">🌍</span>ZAF/SWE/DEU</button>
+
+  <div class="sidebar-section-label">Languages</div>
+  <button class="stab"        id="tab-deutschland" onclick="switchTab('deutschland')"><span class="stab-icon">🇩🇪</span>Deutsch</button>
+  <button class="stab"        id="tab-espanol"     onclick="switchTab('espanol')"><span class="stab-icon">🌵</span>Español</button>
+  <button class="stab"        id="tab-francais"    onclick="switchTab('francais')"><span class="stab-icon">⚜</span>Français</button>
+
+  <div class="sidebar-section-label">Leagues</div>
+  <button class="stab"        id="tab-announcements" onclick="switchTab('announcements')"><span class="stab-icon">📢</span>Announcements</button>
+  <button class="stab"        id="tab-nw"          onclick="switchTab('nw')"><span class="stab-icon">⚔</span>NW League</button>
+  <button class="stab"        id="tab-wwwh"        onclick="switchTab('wwwh')"><span class="stab-icon">🐴</span>WWWH League</button>
+  <button class="stab"        id="tab-eb"          onclick="switchTab('eb')"><span class="stab-icon">🌅</span>EB League</button>
+  <button class="stab"        id="tab-li"          onclick="switchTab('li')"><span class="stab-icon">🏆</span>LI League</button>
+
+  <div class="sidebar-section-label">Other</div>
+  <button class="stab"        id="tab-links"       onclick="switchTab('links')"><span class="stab-icon">🔗</span>Links</button>
+</nav>
+
+<!-- ── MAIN CONTENT ───────────────────────────────────────── -->
+<div class="main-content">
 
 <!-- ══ ANNOUNCEMENTS ════════════════════════════════════════ -->
 <div id="section-announcements" style="display:none">
@@ -521,6 +560,11 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   <span class="fr">☔ ♠ ♥ ♦ ♣ ☔</span>
   Rain's Private League Schedules &nbsp;·&nbsp; Auto-refreshes every 30 minutes
 </footer>
+
+</div><!-- /.main-content -->
+</div><!-- /.app-layout -->
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
 </div><!-- /#app -->
 
@@ -752,13 +796,30 @@ function scheduleRefresh() {
 // ── Tab switching ─────────────────────────────────────────────
 function switchTab(id) {
   activeTab = id;
-  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.stab').forEach(function(b){ b.classList.remove('active'); });
   const btn = document.getElementById('tab-'+id);
   if (btn) btn.classList.add('active');
   document.querySelectorAll('[id^="section-"]').forEach(function(s){ s.style.display='none'; });
   const sec = document.getElementById('section-'+id);
   if (sec) sec.style.display='block';
+  // Update mobile title bar
+  const mobTitle = document.getElementById('mobTitle');
+  if (mobTitle && btn) mobTitle.textContent = btn.textContent.trim();
+  // Close sidebar on mobile after selection
+  closeSidebar();
   renderActive();
+}
+
+// ── Sidebar toggle (mobile) ───────────────────────────────────
+function toggleSidebar() {
+  const sidebar  = document.getElementById('sidebar');
+  const overlay  = document.getElementById('sidebarOverlay');
+  const isOpen   = sidebar.classList.contains('open');
+  if (isOpen) { closeSidebar(); } else { sidebar.classList.add('open'); overlay.classList.add('visible'); }
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('visible');
 }
 
 function renderActive() {
