@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>☔ Private League Schedules 🌧️</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rain:       #3a9abd; --rain-light: #6ab8d4; --rain-dim:  #1a4860;
+  --gold:       #c9a84c; --gold-light: #e4c878; --gold-dim:  #7a6030;
+  --green:      #4caf50; --green-light:#78d478; --green-dim: #2a6a2a;
+  --red:        #c44a4a;
+  --bg-dark:    #080c14; --bg-card:    #0f1520; --bg-panel:  #141c2a;
+  --bg-row:     #1a2234; --bg-row-alt: #141c2a;
+  --text-main:  #d0dce8; --text-dim:   #708090; --text-muted:#445060;
+  --border:     #20304a; --border-gold:#3a2e10;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg-dark); color:var(--text-main); font-family:'Crimson Pro',Georgia,serif; min-height:100vh; overflow-x:hidden; }
+
+/* ── LOADING ── */
+#loadingScreen { position:fixed; inset:0; background:var(--bg-dark); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; z-index:999; transition:opacity .4s; }
+#loadingScreen.hidden { opacity:0; pointer-events:none; }
+.loading-title { font-family:'Cinzel',serif; font-size:clamp(1.3rem,3.5vw,2rem); font-weight:900; color:var(--rain-light); letter-spacing:.12em; text-shadow:0 0 40px rgba(58,154,189,.5); text-align:center; padding:0 16px; }
+.loading-rain  { font-size:2.6rem; animation:rainFall 1.4s ease-in-out infinite alternate; display:block; }
+@keyframes rainFall { from{transform:translateY(-8px);opacity:.5} to{transform:translateY(8px);opacity:1} }
+.spinner { width:40px; height:40px; border:3px solid var(--border); border-top-color:var(--rain); border-radius:50%; animation:spin .8s linear infinite; }
+.loading-msg { font-size:.92rem; color:var(--text-dim); font-style:italic; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ── ERROR ── */
+#errorScreen { display:none; position:fixed; inset:0; background:var(--bg-dark); align-items:center; justify-content:center; flex-direction:column; gap:16px; z-index:998; padding:24px; text-align:center; }
+#errorScreen.visible { display:flex; }
+.error-icon  { font-size:2.8rem; }
+.error-title { font-family:'Cinzel',serif; color:var(--red); font-size:1.3rem; letter-spacing:.1em; }
+.error-msg   { color:var(--text-dim); font-size:1rem; max-width:480px; line-height:1.7; }
+.error-code  { background:var(--bg-panel); border:1px solid var(--border); border-radius:4px; padding:12px 16px; font-family:monospace; font-size:.82rem; color:var(--text-dim); max-width:520px; word-break:break-all; }
+.retry-btn   { margin-top:8px; padding:10px 24px; background:transparent; color:var(--rain-light); border:1px solid var(--rain-dim); border-radius:20px; font-family:'Cinzel',serif; font-size:.76rem; font-weight:700; letter-spacing:.12em; cursor:pointer; transition:all .2s; }
+.retry-btn:hover { background:rgba(58,154,189,.15); border-color:var(--rain); }
+
+/* ── HEADER ── */
+header { text-align:center; padding:28px 24px 18px; position:relative; background:linear-gradient(180deg,#050810 0%,var(--bg-dark) 100%); border-bottom:1px solid var(--border); }
+.rain-bar { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,transparent,var(--rain-dim),var(--rain),var(--rain-light),var(--rain),var(--rain-dim),transparent); }
+header h1 { font-family:'Cinzel',serif; font-size:clamp(1.5rem,4vw,2.6rem); font-weight:900; letter-spacing:.1em; color:var(--rain-light); text-shadow:0 0 40px rgba(58,154,189,.5),0 2px 4px rgba(0,0,0,.8); }
+header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); font-weight:400; letter-spacing:.22em; color:var(--text-dim); margin-top:6px; }
+.header-ornament { font-size:.85rem; color:var(--rain-dim); letter-spacing:.4em; margin:7px 0 0; }
+.hdr-row { display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:8px; }
+.live-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(58,154,189,.08); border:1px solid var(--rain-dim); border-radius:20px; padding:5px 16px; font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:.2em; color:var(--text-dim); }
+.live-dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 6px var(--green); animation:pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.hdr-refresh { display:inline-flex; align-items:center; gap:5px; background:transparent; color:var(--text-dim); border:1px solid var(--border); border-radius:20px; padding:5px 14px; font-family:'Cinzel',serif; font-size:.7rem; font-weight:700; letter-spacing:.12em; cursor:pointer; transition:all .2s; }
+.hdr-refresh:hover { color:var(--rain-light); border-color:var(--rain-dim); }
+.hdr-refresh.spinning .rih { display:inline-block; animation:spin .6s linear infinite; }
+.updated-time { font-size:.75rem; color:var(--text-muted); margin-top:5px; font-style:italic; }
+.countdown    { font-size:.68rem; color:var(--text-muted); font-family:'Cinzel',serif; letter-spacing:.08em; margin-top:3px; }
+
+/* ── TAB NAV ── */
+.tab-nav { display:flex; background:var(--bg-dark); border-bottom:2px solid var(--border); overflow-x:auto; scrollbar-width:thin; }
+.tab-nav::-webkit-scrollbar { height:3px; }
+.tab-nav::-webkit-scrollbar-track { background:var(--bg-dark); }
+.tab-nav::-webkit-scrollbar-thumb { background:var(--border); }
+.tab-btn { font-family:'Cinzel',serif; font-size:.68rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:13px 20px; cursor:pointer; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; background:transparent; color:var(--text-dim); transition:all .2s; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+.tab-btn:hover { color:var(--rain-light); }
+.tab-btn.active { color:var(--rain-light); border-bottom-color:var(--rain); background:rgba(58,154,189,.07); }
+.tab-icon { font-size:.9rem; }
+
+/* ── STATUS FILTER BAR ── */
+.filter-bar { display:flex; align-items:center; gap:8px; padding:11px 18px; background:var(--bg-card); border-bottom:1px solid var(--border); overflow-x:auto; flex-wrap:wrap; }
+.filter-label { font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:.18em; color:var(--text-muted); flex-shrink:0; white-space:nowrap; }
+.filter-pill { font-family:'Cinzel',serif; font-size:.66rem; font-weight:700; letter-spacing:.1em; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer; white-space:nowrap; transition:all .2s; flex-shrink:0; }
+.filter-pill:hover { border-color:var(--rain-dim); color:var(--rain-light); }
+.filter-pill.active     { background:rgba(112,128,144,.15); border-color:var(--text-dim);   color:var(--text-main); }
+.filter-pill.pill-run.active  { background:rgba(76,175,80,.15);  border-color:var(--green);      color:var(--green-light); }
+.filter-pill.pill-reg.active  { background:rgba(58,154,189,.18); border-color:var(--rain);       color:var(--rain-light); }
+.filter-pill.pill-ann.active  { background:rgba(201,168,76,.15); border-color:var(--gold);       color:var(--gold-light); }
+.result-count { font-size:.75rem; color:var(--text-muted); font-style:italic; white-space:nowrap; margin-left:auto; }
+
+/* ── ANNOUNCEMENT CARDS ── */
+.cards-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:14px; padding:18px; }
+.ann-card { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s,box-shadow .15s; }
+.ann-card:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,.55); }
+.card-head { padding:9px 13px 8px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.card-league { font-family:'Cinzel',serif; font-size:.62rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+.card-status { font-family:'Cinzel',serif; font-size:.58rem; font-weight:700; letter-spacing:.08em; padding:2px 8px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+.st-running     { background:rgba(76,175,80,.2);  color:var(--green-light); border:1px solid var(--green-dim); }
+.st-registering { background:rgba(58,154,189,.2); color:var(--rain-light);  border:1px solid var(--rain-dim);  }
+.st-announced   { background:rgba(201,168,76,.15);color:var(--gold-light);  border:1px solid var(--gold-dim);  }
+.st-finished    { background:rgba(60,70,80,.2);   color:var(--text-muted);  border:1px solid var(--border);    }
+.st-cancelled   { background:rgba(196,74,74,.15); color:#e08080;            border:1px solid #6a2020;          }
+.card-body { padding:12px 13px 10px; flex:1; }
+.card-name { font-family:'Cinzel',serif; font-size:.9rem; font-weight:700; line-height:1.35; margin-bottom:9px; }
+.card-name a { color:var(--text-main); text-decoration:none; transition:color .15s; }
+.card-name a:hover { color:var(--rain-light); text-decoration:underline; }
+.card-meta { display:flex; flex-direction:column; gap:4px; }
+.card-meta-row { font-size:.8rem; color:var(--text-dim); display:flex; align-items:flex-start; gap:6px; }
+.mi { font-size:.75rem; width:14px; text-align:center; flex-shrink:0; margin-top:1px; }
+.card-foot { padding:8px 13px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:flex-end; }
+.card-lobby-link { font-family:'Cinzel',serif; font-size:.62rem; font-weight:700; letter-spacing:.1em; color:var(--rain-light); text-decoration:none; background:rgba(58,154,189,.1); border:1px solid var(--rain-dim); border-radius:12px; padding:4px 11px; transition:all .15s; white-space:nowrap; }
+.card-lobby-link:hover { background:rgba(58,154,189,.22); border-color:var(--rain); }
+.card-join-link { font-family:'Cinzel',serif; font-size:.62rem; font-weight:700; letter-spacing:.1em; color:var(--green-light); text-decoration:none; background:rgba(76,175,80,.1); border:1px solid var(--green-dim); border-radius:12px; padding:4px 11px; transition:all .15s; white-space:nowrap; }
+.card-join-link:hover { background:rgba(76,175,80,.22); border-color:var(--green); }
+
+/* ── LEAGUE HEADER BANNER ── */
+.league-banner { padding:18px 20px 14px; text-align:center; background:var(--bg-card); border-bottom:1px solid var(--border); }
+.league-banner-title { font-family:'Cinzel',serif; font-size:clamp(1rem,3vw,1.6rem); font-weight:900; letter-spacing:.12em; }
+.league-banner-sub   { font-size:.85rem; color:var(--text-dim); margin-top:5px; font-style:italic; }
+
+/* ── CALENDAR VIEW ── */
+.cal-section { padding:0 0 40px; }
+.cal-tz-label { font-family:'Cinzel',serif; font-size:.8rem; letter-spacing:.18em; color:var(--text-dim); padding:11px 20px 9px; background:var(--bg-card); border-bottom:1px solid var(--border); text-transform:uppercase; }
+.cal-wrap  { overflow-x:auto; padding:16px; }
+.cal-table { border-collapse:collapse; font-size:.82rem; }
+.cal-date-hdr { font-family:'Cinzel',serif; font-size:.7rem; font-weight:700; letter-spacing:.1em; text-align:center; padding:10px 12px 8px; background:var(--bg-panel); color:var(--text-dim); border:1px solid var(--border); white-space:nowrap; text-transform:uppercase; min-width:200px; }
+.cal-date-hdr.today { background:rgba(58,154,189,.14); color:var(--rain-light); border-color:var(--rain-dim); box-shadow:inset 0 0 0 2px var(--rain-dim); }
+.cal-date-hdr .today-badge { display:block; font-size:.55rem; color:var(--rain); letter-spacing:.2em; margin-top:3px; }
+.cal-cell { vertical-align:top; padding:6px; border:1px solid var(--border); background:var(--bg-card); width:200px; min-width:200px; }
+.cal-cell.today { background:rgba(58,154,189,.05); border-color:var(--rain-dim); }
+.cal-tourn { border-radius:6px; padding:8px 10px; margin-bottom:6px; border-left:3px solid; display:flex; flex-direction:column; gap:3px; }
+.cal-tourn:last-child { margin-bottom:0; }
+.cal-time   { font-family:'Cinzel',serif; font-size:.64rem; font-weight:700; color:var(--text-dim); letter-spacing:.07em; }
+.cal-tname  { font-size:.82rem; line-height:1.3; }
+.cal-tname a { color:var(--text-main); text-decoration:none; transition:color .15s; }
+.cal-tname a:hover { color:var(--rain-light); text-decoration:underline; }
+.cal-tleague { font-size:.66rem; font-style:italic; margin-top:1px; }
+.cal-tgame   { font-size:.66rem; color:var(--text-muted); }
+.cal-tstatus { display:inline-block; font-family:'Cinzel',serif; font-size:.54rem; font-weight:700; letter-spacing:.05em; padding:1px 6px; border-radius:8px; margin-top:2px; }
+.cal-tprize  { font-size:.66rem; color:var(--gold); }
+
+/* ── LINKS PAGE ── */
+.links-wrap { padding:20px; max-width:1100px; margin:0 auto; }
+.links-group { margin-bottom:26px; }
+.links-group-title { font-family:'Cinzel',serif; font-size:1rem; font-weight:700; letter-spacing:.1em; padding:10px 0 10px; border-bottom:2px solid var(--border); margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+.lg-dot { display:inline-block; width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.links-buttons { display:flex; flex-wrap:wrap; gap:10px; }
+.link-btn { font-family:'Cinzel',serif; font-size:.74rem; font-weight:700; letter-spacing:.09em; padding:10px 18px; border-radius:8px; border:1px solid var(--border); background:var(--bg-panel); color:var(--text-dim); text-decoration:none; transition:all .2s; display:inline-flex; align-items:center; gap:7px; }
+.link-btn:hover { background:var(--bg-row); color:var(--rain-light); border-color:var(--rain-dim); transform:translateY(-1px); box-shadow:0 4px 14px rgba(0,0,0,.4); }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align:center; padding:60px 20px; color:var(--text-muted); }
+.empty-icon  { font-size:3rem; margin-bottom:12px; }
+.empty-text  { font-family:'Cinzel',serif; font-size:.88rem; letter-spacing:.1em; }
+
+/* ── FOOTER ── */
+footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8rem; letter-spacing:.06em; border-top:1px solid var(--border); margin-top:30px; }
+.fr { color:var(--rain-dim); letter-spacing:.3em; display:block; margin-bottom:4px; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px) {
+  .cards-grid { grid-template-columns:1fr; padding:12px; }
+  .tab-btn { padding:12px 14px; font-size:.62rem; }
+  header h1 { letter-spacing:.06em; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOADING ══════════════════════════════════════════════ -->
+<div id="loadingScreen">
+  <div class="loading-title">☔ PRIVATE LEAGUE SCHEDULES 🌧️</div>
+  <span class="loading-rain">🌧️</span>
+  <div class="spinner"></div>
+  <div class="loading-msg">Fetching tournament data…</div>
+</div>
+
+<!-- ══ ERROR ════════════════════════════════════════════════ -->
+<div id="errorScreen">
+  <div class="error-icon">⚠</div>
+  <div class="error-title">FAILED TO LOAD DATA</div>
+  <div class="error-msg">Could not reach the data server. Make sure WEBAPP_URL is set correctly after deploying the GAS web app.</div>
+  <div class="error-code" id="errorDetail"></div>
+  <button class="retry-btn" onclick="loadData(true)">↺ RETRY</button>
+</div>
+
+<!-- ══ APP ══════════════════════════════════════════════════ -->
+<div id="app" style="display:none">
+
+<header>
+  <div class="rain-bar"></div>
+  <h1>☔ PRIVATE LEAGUE SCHEDULES 🌧️</h1>
+  <h2>19 Leagues &nbsp;·&nbsp; Multiple Time Zones &nbsp;·&nbsp; Live Updates</h2>
+  <div class="header-ornament">♠ ♥ ♦ ♣ ☔ ♣ ♦ ♥ ♠</div>
+  <div class="hdr-row">
+    <div class="live-badge"><span class="live-dot"></span>LIVE DATA</div>
+    <button class="hdr-refresh" id="hdrRefreshBtn" onclick="loadData(true)"><span class="rih">&#8635;</span> REFRESH</button>
+  </div>
+  <div class="updated-time" id="updatedTime"></div>
+  <div class="countdown" id="countdownEl"></div>
+</header>
+
+<!-- ══ TAB NAV ══════════════════════════════════════════════ -->
+<div class="tab-nav">
+  <button class="tab-btn active" id="tab-newyork"       onclick="switchTab('newyork')"><span class="tab-icon">🗽</span>NEW YORK</button>
+  <button class="tab-btn"        id="tab-seattle"       onclick="switchTab('seattle')"><span class="tab-icon">☕</span>SEATTLE</button>
+  <button class="tab-btn"        id="tab-chicago"       onclick="switchTab('chicago')"><span class="tab-icon">🌆</span>CHICAGO</button>
+  <button class="tab-btn"        id="tab-london"        onclick="switchTab('london')"><span class="tab-icon">🇬🇧</span>LONDON</button>
+  <button class="tab-btn"        id="tab-sydney"        onclick="switchTab('sydney')"><span class="tab-icon">🦘</span>SYDNEY</button>
+  <button class="tab-btn"        id="tab-zaf"           onclick="switchTab('zaf')"><span class="tab-icon">🌍</span>ZAF/SWE/NLD/DEU</button>
+  <button class="tab-btn"        id="tab-deutschland"   onclick="switchTab('deutschland')"><span class="tab-icon">🇩🇪</span>DEUTSCHLAND</button>
+  <button class="tab-btn"        id="tab-espanol"       onclick="switchTab('espanol')"><span class="tab-icon">🌵</span>ESPAÑOL</button>
+  <button class="tab-btn"        id="tab-francais"      onclick="switchTab('francais')"><span class="tab-icon">⚜</span>FRANÇAIS</button>
+  <button class="tab-btn"        id="tab-announcements" onclick="switchTab('announcements')"><span class="tab-icon">📢</span>ANNOUNCEMENTS</button>
+  <button class="tab-btn"        id="tab-nw"            onclick="switchTab('nw')"><span class="tab-icon">⚔</span>NW LEAGUE</button>
+  <button class="tab-btn"        id="tab-wwwh"          onclick="switchTab('wwwh')"><span class="tab-icon">🐴</span>WWWH LEAGUE</button>
+  <button class="tab-btn"        id="tab-eb"            onclick="switchTab('eb')"><span class="tab-icon">🌅</span>EB LEAGUE</button>
+  <button class="tab-btn"        id="tab-li"            onclick="switchTab('li')"><span class="tab-icon">🏆</span>LI LEAGUE</button>
+  <button class="tab-btn"        id="tab-links"         onclick="switchTab('links')"><span class="tab-icon">🔗</span>LINKS</button>
+</div>
+
+<!-- ══ ANNOUNCEMENTS ════════════════════════════════════════ -->
+<div id="section-announcements" style="display:none">
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="fp-all" onclick="setFilter('all')">ALL</button>
+    <button class="filter-pill pill-run" id="fp-run" onclick="setFilter('running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="fp-reg" onclick="setFilter('registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="fp-ann" onclick="setFilter('announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="ann-count"></span>
+  </div>
+  <div class="cards-grid" id="ann-cards"></div>
+</div>
+
+<!-- ══ EB LEAGUE ════════════════════════════════════════════ -->
+<div id="section-eb" style="display:none">
+  <div class="league-banner">
+    <div class="league-banner-title" style="color:#6ab8d4">🌅 EARLY BIRD LEAGUE</div>
+    <div class="league-banner-sub">League ID 65 &nbsp;·&nbsp; Upcoming Tournaments</div>
+    <a class="card-lobby-link" href="https://www.casino.org/replaypoker/leagues/65" target="_blank" style="display:inline-block;margin-top:10px">VIEW LOBBY ↗</a>
+  </div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="lf-eb-all" onclick="setLeagueFilter('eb','all')">ALL</button>
+    <button class="filter-pill pill-run" id="lf-eb-run" onclick="setLeagueFilter('eb','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="lf-eb-reg" onclick="setLeagueFilter('eb','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="lf-eb-ann" onclick="setLeagueFilter('eb','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="lf-eb-count"></span>
+  </div>
+  <div class="cards-grid" id="eb-cards"></div>
+</div>
+
+<!-- ══ LI LEAGUE ════════════════════════════════════════════ -->
+<div id="section-li" style="display:none">
+  <div class="league-banner">
+    <div class="league-banner-title" style="color:#e4c878">🏆 LEAGUES INVITATIONAL</div>
+    <div class="league-banner-sub">League ID 77 &nbsp;·&nbsp; Upcoming Tournaments</div>
+    <a class="card-lobby-link" href="https://www.casino.org/replaypoker/leagues/77" target="_blank" style="display:inline-block;margin-top:10px">VIEW LOBBY ↗</a>
+  </div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="lf-li-all" onclick="setLeagueFilter('li','all')">ALL</button>
+    <button class="filter-pill pill-run" id="lf-li-run" onclick="setLeagueFilter('li','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="lf-li-reg" onclick="setLeagueFilter('li','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="lf-li-ann" onclick="setLeagueFilter('li','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="lf-li-count"></span>
+  </div>
+  <div class="cards-grid" id="li-cards"></div>
+</div>
+
+<!-- ══ CALENDAR TABS ═════════════════════════════════════════ -->
+<div id="section-london" style="display:none">
+  <div class="cal-tz-label">🇬🇧 London Time &nbsp;(Europe/London)</div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="cf-london-all" onclick="setCalFilter('london','all')">ALL</button>
+    <button class="filter-pill pill-run" id="cf-london-run" onclick="setCalFilter('london','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="cf-london-reg" onclick="setCalFilter('london','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="cf-london-ann" onclick="setCalFilter('london','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="cf-london-count"></span>
+  </div>
+  <div class="cal-section"><div class="cal-wrap" id="cal-london"></div></div>
+</div>
+<div id="section-chicago" style="display:none">
+  <div class="cal-tz-label">🌆 Chicago Time &nbsp;(America/Chicago · CDT/CST)</div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="cf-chicago-all" onclick="setCalFilter('chicago','all')">ALL</button>
+    <button class="filter-pill pill-run" id="cf-chicago-run" onclick="setCalFilter('chicago','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="cf-chicago-reg" onclick="setCalFilter('chicago','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="cf-chicago-ann" onclick="setCalFilter('chicago','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="cf-chicago-count"></span>
+  </div>
+  <div class="cal-section"><div class="cal-wrap" id="cal-chicago"></div></div>
+</div>
+<div id="section-sydney" style="display:none">
+  <div class="cal-tz-label">🦘 Sydney Time &nbsp;(Australia/Sydney · AEST)</div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="cf-sydney-all" onclick="setCalFilter('sydney','all')">ALL</button>
+    <button class="filter-pill pill-run" id="cf-sydney-run" onclick="setCalFilter('sydney','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="cf-sydney-reg" onclick="setCalFilter('sydney','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="cf-sydney-ann" onclick="setCalFilter('sydney','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="cf-sydney-count"></span>
+  </div>
+  <div class="cal-section"><div class="cal-wrap" id="cal-sydney"></div></div>
+</div>
+<div id="section-deutschland" style="display:none">
+  <div class="cal-tz-label">🇩🇪 Berliner Zeit &nbsp;(Europe/Berlin)</div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="cf-deutschland-all" onclick="setCalFilter('deutschland','all')">ALL</button>
+    <button class="filter-pill pill-run" id="cf-deutschland-run" onclick="setCalFilter('deutschland','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="cf-deutschland-reg" onclick="setCalFilter('deutschland','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="cf-deutschland-ann" onclick="setCalFilter('deutschland','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="cf-deutschland-count"></span>
+  </div>
+  <div class="cal-section"><div class="cal-wrap" id="cal-deutschland"></div></div>
+</div>
+<div id="section-espanol" style="display:none">
+  <div class="cal-tz-label">🌵 Hora CDT &nbsp;(America/Chicago)</div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="cf-espanol-all" onclick="setCalFilter('espanol','all')">ALL</button>
+    <button class="filter-pill pill-run" id="cf-espanol-run" onclick="setCalFilter('espanol','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="cf-espanol-reg" onclick="setCalFilter('espanol','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="cf-espanol-ann" onclick="setCalFilter('espanol','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="cf-espanol-count"></span>
+  </div>
+  <div class="cal-section"><div class="cal-wrap" id="cal-espanol"></div></div>
+</div>
+<div id="section-francais" style="display:none">
+  <div class="cal-tz-label">⚜ Heure de l'Est &nbsp;(America/New_York)</div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="cf-francais-all" onclick="setCalFilter('francais','all')">ALL</button>
+    <button class="filter-pill pill-run" id="cf-francais-run" onclick="setCalFilter('francais','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="cf-francais-reg" onclick="setCalFilter('francais','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="cf-francais-ann" onclick="setCalFilter('francais','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="cf-francais-count"></span>
+  </div>
+  <div class="cal-section"><div class="cal-wrap" id="cal-francais"></div></div>
+</div>
+
+<!-- ══ NEW YORK ══════════════════════════════════════════════ -->
+<div id="section-newyork">
+  <div class="cal-tz-label">🗽 New York Time &nbsp;(America/New_York · EST/EDT)</div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="cf-newyork-all" onclick="setCalFilter('newyork','all')">ALL</button>
+    <button class="filter-pill pill-run" id="cf-newyork-run" onclick="setCalFilter('newyork','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="cf-newyork-reg" onclick="setCalFilter('newyork','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="cf-newyork-ann" onclick="setCalFilter('newyork','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="cf-newyork-count"></span>
+  </div>
+  <div class="cal-section"><div class="cal-wrap" id="cal-newyork"></div></div>
+</div>
+
+<!-- ══ NW LEAGUE ════════════════════════════════════════════ -->
+<div id="section-nw" style="display:none">
+  <div class="league-banner">
+    <div class="league-banner-title" style="color:#c8d8e8">⚔ NORDIC WARRIORS</div>
+    <div class="league-banner-sub">League ID 67 &nbsp;·&nbsp; Upcoming Tournaments</div>
+    <a class="card-lobby-link" href="https://www.casino.org/replaypoker/leagues/67" target="_blank" style="display:inline-block;margin-top:10px">VIEW LOBBY ↗</a>
+  </div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="lf-nw-all" onclick="setLeagueFilter('nw','all')">ALL</button>
+    <button class="filter-pill pill-run" id="lf-nw-run" onclick="setLeagueFilter('nw','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="lf-nw-reg" onclick="setLeagueFilter('nw','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="lf-nw-ann" onclick="setLeagueFilter('nw','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="lf-nw-count"></span>
+  </div>
+  <div class="cards-grid" id="nw-cards"></div>
+</div>
+
+<!-- ══ SEATTLE ══════════════════════════════════════════════ -->
+<div id="section-seattle" style="display:none">
+  <div class="cal-tz-label">☕ Seattle Time &nbsp;(America/Los_Angeles · PST/PDT)</div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="cf-seattle-all" onclick="setCalFilter('seattle','all')">ALL</button>
+    <button class="filter-pill pill-run" id="cf-seattle-run" onclick="setCalFilter('seattle','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="cf-seattle-reg" onclick="setCalFilter('seattle','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="cf-seattle-ann" onclick="setCalFilter('seattle','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="cf-seattle-count"></span>
+  </div>
+  <div class="cal-section"><div class="cal-wrap" id="cal-seattle"></div></div>
+</div>
+
+<!-- ══ WWWH LEAGUE ══════════════════════════════════════════ -->
+<div id="section-wwwh" style="display:none">
+  <div class="league-banner">
+    <div class="league-banner-title" style="color:#d4ac7a">🐴 WILDHORSES LEAGUE</div>
+    <div class="league-banner-sub">League ID 58 &nbsp;·&nbsp; Upcoming Tournaments</div>
+    <a class="card-lobby-link" href="https://www.casino.org/replaypoker/leagues/58" target="_blank" style="display:inline-block;margin-top:10px">VIEW LOBBY ↗</a>
+  </div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="lf-wwwh-all" onclick="setLeagueFilter('wwwh','all')">ALL</button>
+    <button class="filter-pill pill-run" id="lf-wwwh-run" onclick="setLeagueFilter('wwwh','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="lf-wwwh-reg" onclick="setLeagueFilter('wwwh','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="lf-wwwh-ann" onclick="setLeagueFilter('wwwh','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="lf-wwwh-count"></span>
+  </div>
+  <div class="cards-grid" id="wwwh-cards"></div>
+</div>
+
+<!-- ══ ZAF/SWE/NLD/DEU ══════════════════════════════════════ -->
+<div id="section-zaf" style="display:none">
+  <div class="cal-tz-label">🌍 Stockholm Time &nbsp;(Europe/Stockholm · ZAF, SWE, NLD, DEU)</div>
+  <div class="filter-bar">
+    <span class="filter-label">STATUS ▶</span>
+    <button class="filter-pill active"   id="cf-zaf-all" onclick="setCalFilter('zaf','all')">ALL</button>
+    <button class="filter-pill pill-run" id="cf-zaf-run" onclick="setCalFilter('zaf','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="cf-zaf-reg" onclick="setCalFilter('zaf','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="cf-zaf-ann" onclick="setCalFilter('zaf','announced')">🟡 UPCOMING</button>
+    <span class="result-count" id="cf-zaf-count"></span>
+  </div>
+  <div class="cal-section"><div class="cal-wrap" id="cal-zaf"></div></div>
+</div>
+
+<!-- ══ LINKS ═════════════════════════════════════════════════ -->
+<div id="section-links" style="display:none">
+  <div class="links-wrap" id="links-content"></div>
+</div>
+
+<footer>
+  <span class="fr">☔ ♠ ♥ ♦ ♣ ☔</span>
+  Private League Schedules &nbsp;·&nbsp; Auto-refreshes every 30 minutes
+</footer>
+
+</div><!-- /#app -->
+
+<script>
+// ════════════════════════════════════════════════════════════
+// CONFIGURATION — paste your GAS /exec URL here after deploying
+// ════════════════════════════════════════════════════════════
+const WEBAPP_URL = '';
+
+const REFRESH_MS = 30 * 60 * 1000; // 30 minutes
+
+// ── League colors (dark-theme) ────────────────────────────────
+const LC = {
+  "Leagues Invitational":                        { bg:'rgba(201,168,76,.12)',  bd:'#8a6c2a', tx:'#e4c878' },
+  "Dream Weaver Team":                           { bg:'rgba(180,80,200,.12)',  bd:'#7a3a8a', tx:'#d494e4' },
+  "Nordic Warriors":                             { bg:'rgba(168,184,200,.12)', bd:'#506070', tx:'#c8d8e8' },
+  "Wildhorses":                                  { bg:'rgba(180,140,90,.12)',  bd:'#7a5a30', tx:'#d4ac7a' },
+  "Early Bird League":                           { bg:'rgba(58,154,189,.15)',  bd:'#2a6888', tx:'#6ab8d4' },
+  "Orion's Belt Team Poker 1 - Alnitak":        { bg:'rgba(200,80,80,.12)',   bd:'#882020', tx:'#e08080' },
+  "Orion's Belt Team Poker 2 - Alnilam":        { bg:'rgba(200,80,80,.12)',   bd:'#882020', tx:'#e08080' },
+  "Orion's Belt Team Poker 3 - Mintaka":        { bg:'rgba(200,80,80,.12)',   bd:'#882020', tx:'#e08080' },
+  "Poker Amusement":                             { bg:'rgba(180,100,180,.12)', bd:'#703070', tx:'#d494d4' },
+  "Barnyard Muckers":                            { bg:'rgba(160,160,140,.12)', bd:'#606050', tx:'#d0d0c0' },
+  "Badonk's Donks League":                       { bg:'rgba(200,200,60,.12)',  bd:'#808020', tx:'#e0e060' },
+  "FPL 1 : Forever Phil":                        { bg:'rgba(70,160,220,.12)',  bd:'#204878', tx:'#76c0f0' },
+  "FPL 2 : Jenny & Phil's Dynamic Duos":        { bg:'rgba(80,130,200,.12)',  bd:'#203868', tx:'#80b0e8' },
+  "FPL 3 : Jenny & Phil's Lightning Pairs":     { bg:'rgba(90,120,210,.12)',  bd:'#283878', tx:'#8aa8f2' },
+  "FPL 4 : Jenny's Stud Saturdays":             { bg:'rgba(130,100,200,.12)', bd:'#482878', tx:'#b090e8' },
+  "Team Play Poker":                             { bg:'rgba(80,180,80,.12)',   bd:'#206020', tx:'#80d480' },
+  "Team Play Poker - International Team Cup":    { bg:'rgba(70,160,180,.12)',  bd:'#204858', tx:'#76c8e0' },
+  "Team Play Poker - Two Cool":                  { bg:'rgba(200,200,160,.12)', bd:'#606040', tx:'#d8d8b0' },
+  "Replay Community League":                     { bg:'rgba(200,100,80,.12)',  bd:'#702820', tx:'#e09080' },
+  "Default":                                     { bg:'rgba(60,80,100,.12)',   bd:'#303848', tx:'#8090a0' }
+};
+function lc(name) { return LC[name] || LC['Default']; }
+
+// ── Translations ──────────────────────────────────────────────
+const TR = {
+  de: { Announced:'Angekündigt', Registering:'Registrierung', Finished:'Fertig',    Running:'Laufend',   Cancelled:'Abgebrochen',
+        Tournament:'Turnier',    Game:'Spiel',  Morning:'Morgen', Night:'Nacht', Qualifier:'Qualifikation', Pool:'Pool' },
+  fr: { Announced:'Annoncé',    Registering:'Inscription',    Finished:'Terminé',   Running:'En Cours',  Cancelled:'Annulé',
+        Tournament:'Tournoi',   Game:'Jeu',    Morning:'Matin',  Night:'Nuit',  Qualifier:'Qualificatif',  Pool:'Cagnotte' },
+  es: { Announced:'Anunciado',  Registering:'Registro',        Finished:'Terminado', Running:'En Curso',  Cancelled:'Cancelado',
+        Tournament:'Torneo',    Game:'Juego',  Morning:'Mañana', Night:'Noche', Qualifier:'Calificativo',  Pool:'Pozo' }
+};
+
+// ── Tab configs (timezone, language, locale) ──────────────────
+const TC = {
+  london:      { tz:'Europe/London',     lang:'en', loc:'en-GB' },
+  chicago:     { tz:'America/Chicago',   lang:'en', loc:'en-US' },
+  sydney:      { tz:'Australia/Sydney',  lang:'en', loc:'en-AU' },
+  deutschland: { tz:'Europe/Berlin',     lang:'de', loc:'de-DE' },
+  espanol:     { tz:'America/Chicago',   lang:'es', loc:'es-MX' },
+  francais:    { tz:'America/New_York',  lang:'fr', loc:'fr-CA' },
+  newyork:     { tz:'America/New_York',  lang:'en', loc:'en-US' },
+  seattle:     { tz:'America/Los_Angeles', lang:'en', loc:'en-US' },
+  zaf:         { tz:'Europe/Stockholm', lang:'en', loc:'en-SE' }
+};
+
+// ── State ─────────────────────────────────────────────────────
+let allT         = [];   // all tournaments
+let activeTab    = 'newyork';
+let activeFilter = 'all';
+let leagueFilters = { nw:'all', wwwh:'all', eb:'all', li:'all' };
+let calFilters    = { newyork:'all', seattle:'all', chicago:'all', london:'all', sydney:'all', zaf:'all', deutschland:'all', espanol:'all', francais:'all' };
+let refreshTimer, countdownTimer, nextAt;
+
+// ── Helpers ───────────────────────────────────────────────────
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function stClass(status) {
+  const s = (status||'').toLowerCase();
+  return s==='running'?'st-running':s==='registering'?'st-registering':s==='finished'?'st-finished':s==='cancelled'?'st-cancelled':'st-announced';
+}
+
+function trStatus(status, lang) {
+  if (!lang||lang==='en') return status;
+  return (TR[lang]||{})[status] || status;
+}
+
+function trName(name, lang) {
+  if (!lang||lang==='en') return name;
+  const map = TR[lang]; if (!map) return name;
+  let r = name;
+  Object.keys(map).forEach(function(k) {
+    r = r.replace(new RegExp('\\b'+k+'\\b','gi'), map[k]);
+  });
+  return r;
+}
+
+function fmtTime(iso, tz, loc) {
+  try { return new Intl.DateTimeFormat(loc||'en-US',{timeZone:tz,hour:'numeric',minute:'2-digit',hour12:true}).format(new Date(iso)); }
+  catch(e){ return '?'; }
+}
+
+function fmtLocalTime(iso) {
+  try { return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',weekday:'short',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date(iso)); }
+  catch(e){ return ''; }
+}
+
+function dateKey(iso, tz) {
+  try { return new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(iso)); }
+  catch(e){ return ''; }
+}
+
+function todayKey(tz) { return dateKey(new Date().toISOString(), tz); }
+
+function fmtDateHdr(dk, loc) {
+  try {
+    const [y,m,d] = dk.split('-').map(Number);
+    return new Intl.DateTimeFormat(loc||'en-US',{weekday:'short',month:'short',day:'numeric'}).format(new Date(y,m-1,d,12));
+  } catch(e){ return dk; }
+}
+
+function prizeStr(t) {
+  const p = t.rawPrize>0?t.rawPrize:t.chips;
+  if (!p||p<=0) return '';
+  let s='Pool: '+p.toLocaleString();
+  if (t.addOn>0) s+=' (+'+t.addOn.toLocaleString()+')';
+  return s;
+}
+
+function prizeStrTr(t, lang) {
+  const p = t.rawPrize>0?t.rawPrize:t.chips;
+  if (!p||p<=0) return '';
+  const label = (lang&&TR[lang]&&TR[lang].Pool)||'Pool';
+  let s=label+': '+p.toLocaleString();
+  if (t.addOn>0) s+=' (+'+t.addOn.toLocaleString()+')';
+  return s;
+}
+
+// ── localStorage keys ─────────────────────────────────────────
+const LS_DATA = 'mwa_tournaments';
+const LS_GEN  = 'mwa_generated';
+
+// ── Show app immediately with cached data ─────────────────────
+function showCached(gen, label) {
+  document.getElementById('loadingScreen').classList.add('hidden');
+  document.getElementById('app').style.display = 'block';
+  const el = document.getElementById('updatedTime');
+  if (el) el.textContent = label + ': ' + new Date(gen).toLocaleTimeString();
+  renderActive();
+}
+
+// ── Fetch fresh data from GAS backend ────────────────────────
+function fetchFresh(isBackground) {
+  if (!WEBAPP_URL) {
+    document.getElementById('errorDetail').textContent =
+      'WEBAPP_URL is empty. Deploy the GAS web app, then paste the /exec URL into WEBAPP_URL in this file.';
+    document.getElementById('errorScreen').classList.add('visible');
+    document.getElementById('loadingScreen').classList.add('hidden');
+    return;
+  }
+  const btn = document.getElementById('hdrRefreshBtn');
+  if (btn) btn.classList.add('spinning');
+
+  const url = WEBAPP_URL + (WEBAPP_URL.includes('?')?'&':'?') + 'get=data&_=' + Date.now();
+
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.error) throw new Error(data.error);
+      allT = data.tournaments || [];
+      // Save to localStorage for instant next load
+      try {
+        localStorage.setItem(LS_DATA, JSON.stringify(allT));
+        localStorage.setItem(LS_GEN,  data.generated || new Date().toISOString());
+      } catch(e) {}
+      const el = document.getElementById('updatedTime');
+      if (el) el.textContent = 'Updated: ' + new Date(data.generated||Date.now()).toLocaleTimeString();
+      document.getElementById('loadingScreen').classList.add('hidden');
+      document.getElementById('errorScreen').classList.remove('visible');
+      document.getElementById('app').style.display = 'block';
+      renderActive();
+      scheduleRefresh();
+    })
+    .catch(function(err){
+      // If background refresh fails, keep showing cached data — don't hide the app
+      if (!isBackground) {
+        document.getElementById('loadingScreen').classList.add('hidden');
+        document.getElementById('errorDetail').textContent = String(err.message||err);
+        document.getElementById('errorScreen').classList.add('visible');
+      } else {
+        const el = document.getElementById('updatedTime');
+        if (el) el.textContent += ' · (refresh failed)';
+      }
+    })
+    .finally(function(){ if (btn) btn.classList.remove('spinning'); });
+}
+
+// ── Main load: show cache instantly, then refresh in background
+function loadData(force) {
+  if (force) { fetchFresh(false); return; }
+
+  // Try localStorage first — show instantly if available
+  try {
+    const cached = localStorage.getItem(LS_DATA);
+    const cachedGen = localStorage.getItem(LS_GEN);
+    if (cached && cachedGen) {
+      allT = JSON.parse(cached);
+      showCached(cachedGen, 'Cached');
+      // Refresh in background — user already sees data
+      fetchFresh(true);
+      return;
+    }
+  } catch(e) {}
+
+  // No cache — show loading screen and wait for fresh data
+  fetchFresh(false);
+}
+
+function scheduleRefresh() {
+  if (refreshTimer)   clearTimeout(refreshTimer);
+  if (countdownTimer) clearInterval(countdownTimer);
+  nextAt = Date.now() + REFRESH_MS;
+  refreshTimer = setTimeout(function(){ loadData(true); }, REFRESH_MS);
+  countdownTimer = setInterval(function(){
+    const rem = Math.max(0, nextAt - Date.now());
+    const m   = Math.floor(rem/60000);
+    const s   = Math.floor((rem%60000)/1000);
+    const el  = document.getElementById('countdownEl');
+    if (el) el.textContent = 'Next auto-refresh in ' + m + ':' + String(s).padStart(2,'0');
+    if (rem===0) clearInterval(countdownTimer);
+  }, 1000);
+}
+
+// ── Tab switching ─────────────────────────────────────────────
+function switchTab(id) {
+  activeTab = id;
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  const btn = document.getElementById('tab-'+id);
+  if (btn) btn.classList.add('active');
+  document.querySelectorAll('[id^="section-"]').forEach(function(s){ s.style.display='none'; });
+  const sec = document.getElementById('section-'+id);
+  if (sec) sec.style.display='block';
+  renderActive();
+}
+
+function renderActive() {
+  if (!allT.length) return;
+  if      (activeTab==='announcements') renderAnnouncements();
+  else if (activeTab==='eb')           renderLeague('65','eb-cards','eb');
+  else if (activeTab==='li')           renderLeague('77','li-cards','li');
+  else if (activeTab==='london')       renderCalendar('london',   'cal-london');
+  else if (activeTab==='chicago')      renderCalendar('chicago',  'cal-chicago');
+  else if (activeTab==='sydney')       renderCalendar('sydney',   'cal-sydney');
+  else if (activeTab==='deutschland')  renderCalendar('deutschland','cal-deutschland');
+  else if (activeTab==='espanol')      renderCalendar('espanol',  'cal-espanol');
+  else if (activeTab==='francais')     renderCalendar('francais', 'cal-francais');
+  else if (activeTab==='links')        renderLinks();
+  else if (activeTab==='newyork')      renderCalendar('newyork',  'cal-newyork');
+  else if (activeTab==='nw')           renderLeague('67','nw-cards','nw');
+  else if (activeTab==='seattle')      renderCalendar('seattle',  'cal-seattle');
+  else if (activeTab==='wwwh')         renderLeague('58','wwwh-cards','wwwh');
+  else if (activeTab==='zaf')          renderCalendar('zaf',      'cal-zaf');
+}
+
+// ── Status filter ─────────────────────────────────────────────
+function setFilter(f) {
+  activeFilter = f;
+  ['all','run','reg','ann'].forEach(function(id){
+    const el = document.getElementById('fp-'+id);
+    if (el) el.classList.remove('active');
+  });
+  const map = {all:'all',running:'run',registering:'reg',announced:'ann'};
+  const el = document.getElementById('fp-'+(map[f]||'all'));
+  if (el) el.classList.add('active');
+  renderAnnouncements();
+}
+
+function applyFilter(list) {
+  if (activeFilter==='all') return list;
+  return list.filter(function(t){
+    const s = (t.status||'').toLowerCase();
+    if (activeFilter==='running')     return s==='running';
+    if (activeFilter==='registering') return s==='registering';
+    if (activeFilter==='announced')   return s==='announced';
+    return true;
+  });
+}
+
+// ── Per-calendar status filter ────────────────────────────────
+function setCalFilter(tab, f) {
+  calFilters[tab] = f;
+  ['all','run','reg','ann'].forEach(function(id){
+    const el = document.getElementById('cf-'+tab+'-'+id);
+    if (el) el.classList.remove('active');
+  });
+  const idMap = { all:'all', running:'run', registering:'reg', announced:'ann' };
+  const el = document.getElementById('cf-'+tab+'-'+(idMap[f]||'all'));
+  if (el) el.classList.add('active');
+  renderCalendar(tab, 'cal-'+tab);
+}
+
+// ── Per-league status filter ──────────────────────────────────
+function setLeagueFilter(tab, f) {
+  leagueFilters[tab] = f;
+  // Update pill active states for this tab
+  ['all','run','reg','ann'].forEach(function(id){
+    const el = document.getElementById('lf-'+tab+'-'+id);
+    if (el) el.classList.remove('active');
+  });
+  const idMap = { all:'all', running:'run', registering:'reg', announced:'ann' };
+  const el = document.getElementById('lf-'+tab+'-'+(idMap[f]||'all'));
+  if (el) el.classList.add('active');
+  renderLeague(
+    tab==='nw'?'67':tab==='wwwh'?'58':tab==='eb'?'65':'77',
+    tab+'-cards',
+    tab
+  );
+}
+
+function applyLeagueFilter(list, tab) {
+  const f = leagueFilters[tab] || 'all';
+  if (f==='all') return list;
+  return list.filter(function(t){
+    const s = (t.status||'').toLowerCase();
+    if (f==='running')     return s==='running';
+    if (f==='registering') return s==='registering';
+    if (f==='announced')   return s==='announced';
+    return true;
+  });
+}
+
+// ── Shared card builder ───────────────────────────────────────
+function buildCard(t, linkText, linkHref, linkClass) {
+  const c  = lc(t.league);
+  const pz = prizeStr(t);
+  const tm = fmtLocalTime(t.start);
+  return [
+    '<div class="ann-card" style="border-color:'+c.bd+';background:'+c.bg+'">',
+      '<div class="card-head" style="border-bottom-color:'+c.bd+'">',
+        '<span class="card-league" style="color:'+c.tx+'">'+esc(t.league)+'</span>',
+        '<span class="card-status '+stClass(t.status)+'">'+esc(t.status)+'</span>',
+      '</div>',
+      '<div class="card-body">',
+        '<div class="card-name"><a href="'+esc(t.link)+'" target="_blank">'+esc(t.name)+'</a></div>',
+        '<div class="card-meta">',
+          '<div class="card-meta-row"><span class="mi">📅</span>'+esc(tm)+'</div>',
+          '<div class="card-meta-row"><span class="mi">🎮</span>'+esc(t.game||'Poker')+'</div>',
+          pz ? '<div class="card-meta-row"><span class="mi">💰</span>'+esc(pz)+'</div>' : '',
+        '</div>',
+      '</div>',
+      '<div class="card-foot">',
+        '<a class="'+linkClass+'" href="'+esc(linkHref)+'" target="_blank">'+esc(linkText)+' ↗</a>',
+      '</div>',
+    '</div>'
+  ].join('');
+}
+
+// ── Render: Announcements ─────────────────────────────────────
+function renderAnnouncements() {
+  const active   = allT.filter(function(t){ const s=(t.status||'').toLowerCase(); return s!=='finished'&&s!=='cancelled'; });
+  const filtered = applyFilter(active);
+  const countEl  = document.getElementById('ann-count');
+  if (countEl) countEl.textContent = filtered.length + ' tournament'+(filtered.length!==1?'s':'');
+  const el = document.getElementById('ann-cards');
+  if (!el) return;
+  if (!filtered.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">🌧️</div><div class="empty-text">NO TOURNAMENTS FOUND</div></div>';
+    return;
+  }
+  el.innerHTML = filtered.map(function(t){ return buildCard(t,'LOBBY',t.lobbyLink,'card-lobby-link'); }).join('');
+}
+
+// ── Render: Single league ─────────────────────────────────────
+function renderLeague(id, containerId, tab) {
+  const base = allT.filter(function(t){
+    const s=(t.status||'').toLowerCase();
+    return t.leagueId===id && s!=='finished' && s!=='cancelled';
+  });
+  const filtered = tab ? applyLeagueFilter(base, tab) : base;
+
+  // Update count badge
+  if (tab) {
+    const countEl = document.getElementById('lf-'+tab+'-count');
+    if (countEl) countEl.textContent = filtered.length + ' tournament'+(filtered.length!==1?'s':'');
+  }
+
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!filtered.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">🌧️</div><div class="empty-text">NO TOURNAMENTS MATCH THIS FILTER</div></div>';
+    return;
+  }
+  el.innerHTML = filtered.map(function(t){ return buildCard(t,'JOIN NOW',t.link,'card-join-link'); }).join('');
+}
+
+// ── Render: Calendar ─────────────────────────────────────────
+function renderCalendar(tabKey, containerId) {
+  const cfg = TC[tabKey]; if (!cfg) return;
+  const el  = document.getElementById(containerId); if (!el) return;
+  const { tz, lang, loc } = cfg;
+  const today = todayKey(tz);
+
+  // Apply status filter for this calendar tab
+  const cf = calFilters[tabKey] || 'all';
+  const calSource = allT.filter(function(t){
+    const s = (t.status||'').toLowerCase();
+    if (s==='cancelled') return false;
+    if (cf==='running')     return s==='running';
+    if (cf==='registering') return s==='registering';
+    if (cf==='announced')   return s==='announced';
+    return true;
+  });
+
+  // Update count badge
+  const countEl = document.getElementById('cf-'+tabKey+'-count');
+  if (countEl) countEl.textContent = calSource.length + ' tournament'+(calSource.length!==1?'s':'');
+
+  // Group tournaments by date key in this TZ
+  const map = {};
+  calSource.forEach(function(t){
+        const dk = dateKey(t.start, tz);
+        if (!dk) return;
+        if (!map[dk]) map[dk] = [];
+        map[dk].push(t);
+      });
+
+  const dates = Object.keys(map).sort();
+  if (!dates.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">NO TOURNAMENTS SCHEDULED</div></div>';
+    return;
+  }
+
+  let h = '<table class="cal-table"><thead><tr>';
+  dates.forEach(function(dk){
+    const isTd = dk===today;
+    const lbl  = fmtDateHdr(dk, loc);
+    h += '<th class="cal-date-hdr'+(isTd?' today':'')+'">'+esc(lbl)+(isTd?'<span class="today-badge">▼ TODAY ▼</span>':'')+'</th>';
+  });
+  h += '</tr></thead><tbody><tr>';
+
+  dates.forEach(function(dk){
+    const isTd = dk===today;
+    h += '<td class="cal-cell'+(isTd?' today':'')+'">';
+    (map[dk]||[]).forEach(function(t){
+      const c      = lc(t.league);
+      const tm     = fmtTime(t.start, tz, loc);
+      const dName  = trName(t.name, lang);
+      const dStatus= trStatus(t.status||'Announced', lang);
+      const pz     = prizeStrTr(t, lang);
+      h += [
+        '<div class="cal-tourn" style="background:'+c.bg+';border-left-color:'+c.bd+'">',
+          '<div class="cal-time">'+esc(tm)+'</div>',
+          '<div class="cal-tname"><a href="'+esc(t.link)+'" target="_blank">'+esc(dName)+'</a></div>',
+          '<div class="cal-tleague" style="color:'+c.tx+'">'+esc(t.league)+'</div>',
+          t.game ? '<div class="cal-tgame">'+esc(t.game)+'</div>' : '',
+          '<span class="cal-tstatus '+stClass(t.status)+'">'+esc(dStatus)+'</span>',
+          pz ? '<div class="cal-tprize">'+esc(pz)+'</div>' : '',
+        '</div>'
+      ].join('');
+    });
+    h += '</td>';
+  });
+
+  h += '</tr></tbody></table>';
+  el.innerHTML = h;
+
+  // Scroll today's column into view
+  const todayHdr = el.querySelector('.cal-date-hdr.today');
+  if (todayHdr) setTimeout(function(){ todayHdr.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'}); }, 80);
+}
+
+// ── Render: Links ─────────────────────────────────────────────
+function renderLinks() {
+  const el = document.getElementById('links-content');
+  if (!el) return;
+
+  const GROUPS = [
+    { name:'Leagues Invitational', lc:'Leagues Invitational', links:[
+      { url:'https://www.casino.org/replaypoker/leagues/77', tx:'🏛 Lobby' },
+      { url:'https://docs.google.com/spreadsheets/d/1tR7bD0Kv7vuFX_FJVZF7RxsStf6OUI6Nr21LTp9Hp6s/edit?gid=995912371#gid=995912371', tx:'📊 Leaderboard' },
+      { url:'https://forum.casino.org/t/leagues-invitational/48266/9999', tx:'💬 Forum' }
+    ]},
+    { name:'Dream Weaver Team', lc:'Dream Weaver Team', links:[
+      { url:'https://www.casino.org/replaypoker/leagues/30', tx:'🏛 Lobby' },
+      { url:'https://forum.casino.org/t/dream-weaver/16386/9999', tx:'💬 Forum' }
+    ]},
+    { name:'Nordic Warriors', lc:'Nordic Warriors', links:[
+      { url:'https://www.casino.org/replaypoker/leagues/67', tx:'🏛 Lobby' },
+      { url:'https://docs.google.com/spreadsheets/d/12rb6HCY_sctnkSWpIGYN0aFILAp7lTrrJBxIe7PuoTw/edit?gid=551967990#gid=551967990', tx:'📊 Leaderboard' },
+      { url:'https://forum.casino.org/t/nordic-warriors-league/43535/9999', tx:'💬 Forum' }
+    ]},
+    { name:'Wildhorses', lc:'Wildhorses', links:[
+      { url:'https://www.casino.org/replaypoker/leagues/58', tx:'🏛 Lobby' },
+      { url:'https://docs.google.com/spreadsheets/d/1RB39pF7h4wl4WODQsSTmNnQJOcLAIuwVvSvIPTtsiS4/edit?gid=5835898#gid=58358998', tx:'📊 Leaderboard' },
+      { url:'https://forum.casino.org/t/wildhorses-poker-league/37500/9999', tx:'💬 Forum' }
+    ]},
+    { name:'Early Bird League', lc:'Early Bird League', links:[
+      { url:'https://www.casino.org/replaypoker/leagues/65', tx:'🏛 Lobby' },
+      { url:'https://docs.google.com/spreadsheets/d/15uamnSc938MlU2FWu0KQibobJYtALHKU_Wgkf7VhTOQ/edit?gid=2112906447#gid=2112906447', tx:'📊 Leaderboard' },
+      { url:'https://forum.casino.org/t/team-play-poker/8579/9999', tx:'💬 Forum' }
+    ]},
+    { name:"Orion's Belt", lc:"Orion's Belt Team Poker 1 - Alnitak", links:[
+      { url:'https://www.casino.org/replaypoker/leagues/81', tx:"🏛 Alnitak (OB1) Lobby" },
+      { url:'https://www.casino.org/replaypoker/leagues/82', tx:"🏛 Alnilam (OB2) Lobby" },
+      { url:'https://www.casino.org/replaypoker/leagues/83', tx:"🏛 Mintaka (OB3) Lobby" },
+      { url:'https://docs.google.com/spreadsheets/d/1lWOFWZewWz3rmPet2j0dbWLO_D7hxkQKzSL8OlZhXko/edit?gid=775104175#gid=775104175', tx:"📊 Leaderboard" },
+      { url:'https://forum.casino.org/t/orions-belt-team-poker/57677/9999', tx:'💬 Forum' }
+    ]},
+    { name:'Poker Amusement', lc:'Poker Amusement', links:[
+      { url:'https://www.casino.org/replaypoker/leagues/12', tx:'🏛 Lobby' },
+      { url:'https://forum.casino.org/t/poker-amusement-league/7837/9999', tx:'💬 Forum' }
+    ]},
+    { name:'Barnyard Muckers', lc:'Barnyard Muckers', links:[
+      { url:'https://www.casino.org/replaypoker/leagues/35', tx:'🏛 Lobby' },
+      { url:'https://docs.google.com/spreadsheets/d/1EhxfYTaVIWKKDvJVbdeaTzuoslTk4wGzryQIY7livrA/edit?li=1&gid=1140930927#gid=1140930927', tx:'📊 Leaderboard' },
+      { url:'https://forum.casino.org/t/barnyard-muckers-league/19813/9999', tx:'💬 Forum' }
+    ]},
+    { name:"Badonk's Donks League", lc:"Badonk's Donks League", links:[
+      { url:'https://www.casino.org/replaypoker/leagues/14', tx:'🏛 Lobby' },
+      { url:'https://docs.google.com/spreadsheets/d/1XMa0TAUHre--dmA7_zD9vd5i3E83nBcUrr2r3JRvF80/edit?gid=1671608675#gid=1671608675', tx:'📊 Leaderboard' },
+      { url:'https://forum.casino.org/t/badonks-stables-league-results-and-updates/20171/9999', tx:'💬 Forum' }
+    ]},
+    { name:'FPL — Forever Phil & Jenny', lc:'FPL 1 : Forever Phil', links:[
+      { url:'https://www.casino.org/replaypoker/leagues/60', tx:'🏛 FPL1 – Forever Phil' },
+      { url:'https://forum.casino.org/t/forever-phil-new-league/40067/1060', tx:'💬 FPL1 Forum' },
+      { url:'https://www.casino.org/replaypoker/leagues/73', tx:"🏛 FPL2 – Dynamic Duos" },
+      { url:'https://www.casino.org/replaypoker/leagues/74', tx:"🏛 FPL3 – Lightning Pairs" },
+      { url:'https://www.casino.org/replaypoker/leagues/80', tx:"🏛 FPL4 – Stud Saturdays" }
+    ]},
+    { name:'Team Play Poker', lc:'Team Play Poker', links:[
+      { url:'https://www.casino.org/replaypoker/leagues/13', tx:'🏛 TeamPlay Lobby' },
+      { url:'https://www.casino.org/replaypoker/leagues/32', tx:'🏛 International Team Cup' },
+      { url:'https://www.casino.org/replaypoker/leagues/69', tx:'🏛 Two Cool' },
+      { url:'https://docs.google.com/spreadsheets/d/1t6HHSNs63Vkj5nA6D8gbuIHGPaD6R8s159GLS28Dszk/edit?gid=1122609478#gid=1122609478', tx:'📊 Leaderboard' },
+      { url:'https://forum.casino.org/t/team-play-poker/8579/9999', tx:'💬 Forum' }
+    ]},
+    { name:'General Resources', lc:'Default', links:[
+      { url:'https://www.casino.org/replaypoker/lobby', tx:'🃏 Replay Main Lobby' },
+      { url:'https://docs.google.com/presentation/d/e/2PACX-1vTTyLDkaQqgMR3o9HmlwHk52s3qrwezAym5np3KvejTTOa_IovnC4s3dHNbGkSjNiLo_nYvO07aMYyy/pub?start=false&loop=false&delayms=3000&slide=id.p', tx:'📋 Sister Leagues — Everything In One Place' }
+    ]}
+  ];
+
+  el.innerHTML = GROUPS.map(function(g){
+    const c = lc(g.lc);
+    const btns = g.links.map(function(l){
+      return '<a class="link-btn" href="'+esc(l.url)+'" target="_blank" style="border-color:'+c.bd+'">'+esc(l.tx)+' ↗</a>';
+    }).join('');
+    return [
+      '<div class="links-group">',
+        '<div class="links-group-title" style="color:'+c.tx+';border-color:'+c.bd+'">',
+          '<span class="lg-dot" style="background:'+c.bd+'"></span>',
+          esc(g.name),
+        '</div>',
+        '<div class="links-buttons">'+btns+'</div>',
+      '</div>'
+    ].join('');
+  }).join('<hr style="border:none;border-top:1px solid var(--border);margin:4px 0 20px">');
+}
+
+// ── Init ──────────────────────────────────────────────────────
+window.addEventListener('load', function(){ loadData(false); });
+</script>
+</body>
+</html>
