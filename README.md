@@ -42,10 +42,12 @@ Remember your username — it becomes part of every app URL.
 
 ### Step 3 — Upload Your HTML File
 1. Inside your new repository, click **Add file** → **Upload files**
-2. Rename your HTML file to **`index.html`** before uploading
+2. Create an index.html copy and paste your html body then select Commit
+3. Or -Method 4
+4. Rename your HTML file to **`index.html`** before uploading
    *(This tells GitHub Pages which file to show when someone visits the URL)*
-3. Drag the file in, or click to browse for it
-4. Scroll down and click **Commit changes**
+5. Drag the file in, or click to browse for it
+6. Scroll down and click **Commit changes**
 
 ### Step 4 — Turn On GitHub Pages
 1. Click **Settings** (tab at the top of the repository)
