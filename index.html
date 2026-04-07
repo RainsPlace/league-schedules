@@ -16,6 +16,97 @@
   --text-main:  #d0dce8; --text-dim:   #708090; --text-muted:#445060;
   --border:     #20304a; --border-gold:#3a2e10;
 }
+/* ── THEMES ─────────────────────────────────────────────────
+   Override the :root variables per theme. --green/--red stay
+   constant across all themes (status indicators).
+───────────────────────────────────────────────────────────── */
+
+/* Rain (default) — explicit so JS can toggle back cleanly */
+html[data-theme="rain"] {
+  --rain:#3a9abd; --rain-light:#6ab8d4; --rain-dim:#1a4860;
+  --gold:#c9a84c; --gold-light:#e4c878; --gold-dim:#7a6030;
+  --bg-dark:#080c14; --bg-card:#0f1520; --bg-panel:#141c2a;
+  --bg-row:#1a2234; --bg-row-alt:#141c2a;
+  --text-main:#d0dce8; --text-dim:#708090; --text-muted:#445060;
+  --border:#20304a; --border-gold:#3a2e10;
+}
+
+/* Ocean — deep-sea blues with teal-green accents */
+html[data-theme="ocean"] {
+  --rain:#185FA5; --rain-light:#4a90d9; --rain-dim:#0c3660;
+  --gold:#1D9E75; --gold-light:#50c8a0; --gold-dim:#0a5040;
+  --bg-dark:#04080e; --bg-card:#080f1c; --bg-panel:#0d162a;
+  --bg-row:#121e36; --bg-row-alt:#0d162a;
+  --text-main:#ccdcf0; --text-dim:#5880b0; --text-muted:#2a4060;
+  --border:#182540; --border-gold:#0a2238;
+}
+
+/* Forest — deep woodland greens with amber accents */
+html[data-theme="forest"] {
+  --rain:#3B6D11; --rain-light:#72a840; --rain-dim:#1e3808;
+  --gold:#BA7517; --gold-light:#e0a050; --gold-dim:#6a4008;
+  --bg-dark:#040802; --bg-card:#080e04; --bg-panel:#0c1408;
+  --bg-row:#10180a; --bg-row-alt:#0c1408;
+  --text-main:#d8e8d0; --text-dim:#6a8050; --text-muted:#384820;
+  --border:#182810; --border-gold:#3a2008;
+}
+
+/* Sunset — warm dusk oranges with rose accents */
+html[data-theme="sunset"] {
+  --rain:#D85A30; --rain-light:#f08060; --rain-dim:#702010;
+  --gold:#993556; --gold-light:#c06080; --gold-dim:#501828;
+  --bg-dark:#100602; --bg-card:#180a04; --bg-panel:#200e06;
+  --bg-row:#281408; --bg-row-alt:#200e06;
+  --text-main:#f0dcd8; --text-dim:#a07060; --text-muted:#604030;
+  --border:#301808; --border-gold:#301010;
+}
+
+/* Lavender — deep purple with blue accents */
+html[data-theme="lavender"] {
+  --rain:#534AB7; --rain-light:#8880e0; --rain-dim:#281870;
+  --gold:#185FA5; --gold-light:#5090d8; --gold-dim:#082848;
+  --bg-dark:#060410; --bg-card:#0c0a1c; --bg-panel:#121028;
+  --bg-row:#181434; --bg-row-alt:#121028;
+  --text-main:#e0d8f8; --text-dim:#806898; --text-muted:#403060;
+  --border:#201840; --border-gold:#180c38;
+}
+
+/* Slate — cool charcoal with warm silver accents */
+html[data-theme="slate"] {
+  --rain:#888780; --rain-light:#b8b8b0; --rain-dim:#404040;
+  --gold:#c8b880; --gold-light:#e0d0a0; --gold-dim:#706040;
+  --bg-dark:#080808; --bg-card:#101010; --bg-panel:#181818;
+  --bg-row:#202020; --bg-row-alt:#181818;
+  --text-main:#e0e0d8; --text-dim:#888880; --text-muted:#505050;
+  --border:#282828; --border-gold:#302800;
+}
+
+/* Cherry — deep burgundy reds with pink accents */
+html[data-theme="cherry"] {
+  --rain:#A32D2D; --rain-light:#d86060; --rain-dim:#501010;
+  --gold:#D4537E; --gold-light:#f080a8; --gold-dim:#701830;
+  --bg-dark:#0e0406; --bg-card:#160608; --bg-panel:#1c080c;
+  --bg-row:#220c10; --bg-row-alt:#1c080c;
+  --text-main:#f0d8dc; --text-dim:#a06070; --text-muted:#603040;
+  --border:#2c1014; --border-gold:#280810;
+}
+
+/* Dark Cherry — maximum contrast bright red/pink on near-black */
+html[data-theme="darkcherry"] {
+  --rain:#ff6b6b; --rain-light:#ff9898; --rain-dim:#8b1a1a;
+  --gold:#ff7aa2; --gold-light:#ffaac8; --gold-dim:#8b1a3a;
+  --bg-dark:#1a0f0f; --bg-card:#200f0f; --bg-panel:#281414;
+  --bg-row:#301818; --bg-row-alt:#281414;
+  --text-main:#f5f0f0; --text-dim:#c08080; --text-muted:#805050;
+  --border:#3a1a1a; --border-gold:#3a0f0f;
+}
+
+/* ── Theme selector control ─────────────────────────────────── */
+.theme-sel-wrap { display:inline-flex; align-items:center; gap:7px; }
+.theme-sel-label { font-family:'Cinzel',serif; font-size:.62rem; font-weight:700; letter-spacing:.12em; color:var(--text-dim); white-space:nowrap; }
+.theme-sel { background:var(--bg-panel); color:var(--rain-light); border:1px solid var(--rain-dim); border-radius:20px; padding:5px 28px 5px 12px; font-family:'Cinzel',serif; font-size:.68rem; font-weight:700; letter-spacing:.08em; cursor:pointer; outline:none; appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236ab8d4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; transition:border-color .2s; }
+.theme-sel:hover { border-color:var(--rain); }
+
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:var(--bg-dark); color:var(--text-main); font-family:'Crimson Pro',Georgia,serif; min-height:100vh; overflow-x:hidden; }
 
@@ -183,6 +274,19 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   <div class="hdr-row">
     <div class="live-badge"><span class="live-dot"></span>LIVE DATA</div>
     <button class="hdr-refresh" id="hdrRefreshBtn" onclick="loadData(true)"><span class="rih">&#8635;</span> REFRESH</button>
+    <div class="theme-sel-wrap">
+      <span class="theme-sel-label">🎨 THEME</span>
+      <select class="theme-sel" id="themeSelect" onchange="setTheme(this.value)">
+        <option value="rain">☔ Rain (Default)</option>
+        <option value="ocean">🌊 Ocean</option>
+        <option value="forest">🌲 Forest</option>
+        <option value="sunset">🌅 Sunset</option>
+        <option value="lavender">💜 Lavender</option>
+        <option value="slate">🪨 Slate</option>
+        <option value="cherry">🍒 Cherry</option>
+        <option value="darkcherry">🌙 Dark Cherry</option>
+      </select>
+    </div>
   </div>
   <div class="updated-time" id="updatedTime"></div>
   <div class="countdown" id="countdownEl"></div>
@@ -971,8 +1075,22 @@ function renderLinks() {
   }).join('<hr style="border:none;border-top:1px solid var(--border);margin:4px 0 20px">');
 }
 
+// ── Theme selector ────────────────────────────────────────────
+function setTheme(name) {
+  document.documentElement.setAttribute('data-theme', name);
+  try { localStorage.setItem('mwa_theme', name); } catch(e) {}
+  const sel = document.getElementById('themeSelect');
+  if (sel) sel.value = name;
+}
+
+function initTheme() {
+  let saved = 'rain';
+  try { saved = localStorage.getItem('mwa_theme') || 'rain'; } catch(e) {}
+  setTheme(saved);
+}
+
 // ── Init ──────────────────────────────────────────────────────
-window.addEventListener('load', function(){ loadData(false); });
+window.addEventListener('load', function(){ initTheme(); loadData(false); });
 </script>
 </body>
 </html>
