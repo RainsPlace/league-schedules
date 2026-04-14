@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>☔ Private League Schedules 🌧️</title>
+<title>☔ Rain's Private League Schedules 🌧️</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -227,12 +227,18 @@ header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); fon
 .cal-tourn:last-child { margin-bottom:0; }
 .cal-time   { font-family:'Cinzel',serif; font-size:.64rem; font-weight:700; color:var(--text-dim); letter-spacing:.07em; }
 .cal-tname  { font-size:.82rem; line-height:1.3; }
-.cal-tname a { color:var(--text-main); text-decoration:none; transition:color .15s; }
-.cal-tname a:hover { color:var(--rain-light); text-decoration:underline; }
+.cal-tname a { color:var(--green); text-decoration:none; transition:color .15s; }
+.cal-tname a:hover { color:var(--green-light); text-decoration:underline; }
+.cal-link-label { font-family:'Cinzel',serif; font-size:.5rem; font-weight:700; letter-spacing:.08em; color:var(--green); opacity:.7; margin-left:4px; vertical-align:middle; white-space:nowrap; }
 .cal-tleague { font-size:.66rem; font-style:italic; margin-top:1px; }
 .cal-tgame   { font-size:.78rem; color:#ffffff; }
 .cal-tstatus { display:inline-block; font-family:'Cinzel',serif; font-size:.54rem; font-weight:700; letter-spacing:.05em; padding:1px 6px; border-radius:8px; margin-top:2px; }
 .cal-tprize  { font-size:.66rem; color:var(--gold); }
+.cal-buyin   { font-size:.66rem; color:var(--rain-light); font-family:'Cinzel',serif; font-weight:700; letter-spacing:.04em; }
+.cal-buyin-item { font-size:.62rem; color:var(--rain-light); padding-left:6px; }
+.cal-cell-lobby { margin-top:5px; padding-top:5px; border-top:1px solid var(--border); text-align:center; }
+.cal-cell-lobby a { font-family:'Cinzel',serif; font-size:.6rem; font-weight:700; letter-spacing:.1em; color:var(--rain-light); text-decoration:none; background:rgba(58,154,189,.08); border:1px solid var(--rain-dim); border-radius:10px; padding:3px 9px; transition:all .15s; display:inline-block; }
+.cal-cell-lobby a:hover { background:rgba(58,154,189,.2); border-color:var(--rain); }
 
 /* ── LINKS PAGE ── */
 .links-wrap { padding:20px; max-width:1100px; margin:0 auto; }
@@ -268,7 +274,7 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
 
 <!-- ══ LOADING ══════════════════════════════════════════════ -->
 <div id="loadingScreen">
-  <div class="loading-title">☔ PRIVATE LEAGUE SCHEDULES 🌧️</div>
+  <div class="loading-title">☔ Rain's PRIVATE LEAGUE SCHEDULES 🌧️</div>
   <span class="loading-rain">🌧️</span>
   <div class="spinner"></div>
   <div class="loading-msg">Fetching tournament data…</div>
@@ -288,7 +294,7 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
 
 <header>
   <div class="rain-bar"></div>
-  <h1>☔ PRIVATE LEAGUE SCHEDULES 🌧️</h1>
+  <h1>☔ Rain's PRIVATE LEAGUE SCHEDULES 🌧️</h1>
   <h2>19 Leagues &nbsp;·&nbsp; Multiple Time Zones &nbsp;·&nbsp; Live Updates</h2>
   <div class="header-ornament">♠ ♥ ♦ ♣ ☔ ♣ ♦ ♥ ♠</div>
   <div class="hdr-row">
@@ -681,6 +687,20 @@ function fmtDateHdr(dk, loc) {
   } catch(e){ return dk; }
 }
 
+function fmtChips(n) {
+  if (!n || n <= 0) return '';
+  if (n >= 1000000) return (n/1000000 % 1 === 0 ? (n/1000000)+'M' : (n/1000000).toFixed(1)+'M');
+  if (n >= 1000)    return (n/1000    % 1 === 0 ? (n/1000)+'K'    : (n/1000).toFixed(1)+'K');
+  return n.toString();
+}
+
+function buyInStr(t) {
+  if (!t.buyIn || t.buyIn <= 0) return '';
+  let s = fmtChips(t.buyIn);
+  if (t.buyInFee > 0) s += ' + ' + fmtChips(t.buyInFee) + ' fee';
+  return s;
+}
+
 function prizeStr(t) {
   const p = t.rawPrize>0?t.rawPrize:t.chips;
   if (!p||p<=0) return '';
@@ -1020,23 +1040,70 @@ function renderCalendar(tabKey, containerId) {
   dates.forEach(function(dk){
     const isTd = dk===today;
     h += '<td class="cal-cell'+(isTd?' today':'')+'">';
+
+    // Group tournaments within this day by league + start time
+    // so simultaneous numbered games (FL2 Game 1/2/3 etc.) collapse into one block
+    const groups = [];
+    const groupIdx = {};
     (map[dk]||[]).forEach(function(t){
-      const c      = lc(t.league);
-      const tm     = fmtTime(t.start, tz, loc);
-      const dName  = trName(t.name, lang);
-      const dStatus= trStatus(t.status||'Announced', lang);
-      const pz     = prizeStrTr(t, lang);
-      h += [
-        '<div class="cal-tourn" style="background:'+c.bg+';border-left-color:'+c.bd+'">',
-          '<div class="cal-time">'+esc(tm)+'</div>',
-          '<div class="cal-tname"><a href="'+esc(t.link)+'" target="_blank">'+esc(dName)+'</a></div>',
-          '<div class="cal-tleague" style="color:'+c.tx+'">'+esc(t.league)+'</div>',
-          t.game ? '<div class="cal-tgame">'+esc(t.game)+'</div>' : '',
-          '<span class="cal-tstatus '+stClass(t.status)+'">'+esc(dStatus)+'</span>',
-          pz ? '<div class="cal-tprize">'+esc(pz)+'</div>' : '',
-        '</div>'
-      ].join('');
+      const tm = fmtTime(t.start, tz, loc);
+      const gk = t.leagueId + '|' + tm;
+      if (groupIdx[gk] === undefined) {
+        groupIdx[gk] = groups.length;
+        groups.push({ tm: tm, leagueId: t.leagueId, league: t.league, lobbyLink: t.lobbyLink, items: [] });
+      }
+      groups[groupIdx[gk]].items.push(t);
     });
+
+    groups.forEach(function(g){
+      const first = g.items[0];
+      const c     = lc(g.league);
+      // Best status: running > registering > announced
+      var bestStatus = first.status || 'Announced';
+      g.items.forEach(function(t){
+        const s = (t.status||'').toLowerCase();
+        if (s==='running') bestStatus = t.status;
+        else if (s==='registering' && (bestStatus||'').toLowerCase()==='announced') bestStatus = t.status;
+      });
+      const dStatus = trStatus(bestStatus, lang);
+      const pz      = prizeStrTr(first, lang);
+
+      h += '<div class="cal-tourn" style="background:'+c.bg+';border-left-color:'+c.bd+'">';
+      h += '<div class="cal-time">'+esc(g.tm)+'</div>';
+      h += '<div class="cal-tleague" style="color:'+c.tx+'">'+esc(g.league)+'</div>';
+
+      // Check if all games in the group share the same buy-in
+      const firstBI  = buyInStr(g.items[0]);
+      const allSameBI = g.items.every(function(t){ return buyInStr(t) === firstBI; });
+
+      // One link row per game in the group
+      g.items.forEach(function(t){
+        const dName = trName(t.name, lang);
+        const bi    = buyInStr(t);
+        h += '<div class="cal-tname"><a href="'+esc(t.link)+'" target="_blank">'+esc(dName)+
+             '<span class="cal-link-label">↗ Link to Game</span></a></div>';
+        // Per-game buy-in only when they differ within the group
+        if (!allSameBI && bi) {
+          h += '<div class="cal-buyin-item">⬥ '+esc(bi)+'</div>';
+        }
+      });
+
+      // Shared buy-in shown once after all game links
+      if (allSameBI && firstBI) {
+        h += '<div class="cal-buyin">Buy-in: '+esc(firstBI)+'</div>';
+      }
+
+      h += '<span class="cal-tstatus '+stClass(bestStatus)+'">'+esc(dStatus)+'</span>';
+      if (pz) h += '<div class="cal-tprize">'+esc(pz)+'</div>';
+
+      // One lobby link per group at the bottom
+      if (g.lobbyLink) {
+        h += '<div class="cal-cell-lobby"><a href="'+esc(g.lobbyLink)+'" target="_blank">🏛 League Lobby</a></div>';
+      }
+
+      h += '</div>';
+    });
+
     h += '</td>';
   });
 
