@@ -33,7 +33,7 @@ html[data-theme="rain"] {
 
 /* Ocean — rich navy blue backgrounds with teal-green accents */
 html[data-theme="ocean"] {
-  --rain:#185FA5; --rain-light:#4a90d9; --rain-dim:#0c3660;
+  --:#185FA5; ---light:#4a90d9; ---dim:#0c3660;
   --gold:#1D9E75; --gold-light:#50c8a0; --gold-dim:#0a5040;
   --bg-dark:#08203a; --bg-card:#0d2a4c; --bg-panel:#12325a;
   --bg-row:#183a68; --bg-row-alt:#12325a;
@@ -43,7 +43,7 @@ html[data-theme="ocean"] {
 
 /* Forest — deep green backgrounds with amber accents */
 html[data-theme="forest"] {
-  --rain:#3B6D11; --rain-light:#72a840; --rain-dim:#1e3808;
+  --:#3B6D11; ---light:#72a840; ---dim:#1e3808;
   --gold:#BA7517; --gold-light:#e0a050; --gold-dim:#6a4008;
   --bg-dark:#081a04; --bg-card:#0e2408; --bg-panel:#132c0c;
   --bg-row:#183610; --bg-row-alt:#132c0c;
@@ -53,7 +53,7 @@ html[data-theme="forest"] {
 
 /* Sunset — warm amber-brown backgrounds with rose accents */
 html[data-theme="sunset"] {
-  --rain:#D85A30; --rain-light:#f08060; --rain-dim:#702010;
+  --:#D85A30; ---light:#f08060; ---dim:#702010;
   --gold:#993556; --gold-light:#c06080; --gold-dim:#501828;
   --bg-dark:#221008; --bg-card:#2c1408; --bg-panel:#36180a;
   --bg-row:#401e0c; --bg-row-alt:#36180a;
@@ -63,7 +63,7 @@ html[data-theme="sunset"] {
 
 /* Lavender — rich purple backgrounds with blue accents */
 html[data-theme="lavender"] {
-  --rain:#534AB7; --rain-light:#8880e0; --rain-dim:#281870;
+  --:#534AB7; ---light:#8880e0; ---dim:#281870;
   --gold:#185FA5; --gold-light:#5090d8; --gold-dim:#082848;
   --bg-dark:#0e0a28; --bg-card:#141034; --bg-panel:#1a1440;
   --bg-row:#201a4c; --bg-row-alt:#1a1440;
@@ -177,8 +177,7 @@ header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); fon
 .filter-label { font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:.18em; color:var(--text-muted); flex-shrink:0; white-space:nowrap; }
 .filter-pill { font-family:'Cinzel',serif; font-size:.66rem; font-weight:700; letter-spacing:.1em; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer; white-space:nowrap; transition:all .2s; flex-shrink:0; }
 .filter-pill:hover { border-color:var(--rain-dim); color:var(--rain-light); }
-.filter-pill.active           { background:rgba(112,128,144,.15); border-color:var(--text-dim);   color:var(--text-main); }
-.filter-pill.pill-today.active{ background:rgba(153,102,204,.18); border-color:#9966cc;           color:#c499ff; }
+.filter-pill.active     { background:rgba(112,128,144,.15); border-color:var(--text-dim);   color:var(--text-main); }
 .filter-pill.pill-run.active  { background:rgba(76,175,80,.15);  border-color:var(--green);      color:var(--green-light); }
 .filter-pill.pill-reg.active  { background:rgba(58,154,189,.18); border-color:var(--rain);       color:var(--rain-light); }
 .filter-pill.pill-ann.active  { background:rgba(201,168,76,.15); border-color:var(--gold);       color:var(--gold-light); }
@@ -219,10 +218,10 @@ header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); fon
 .cal-tz-label { font-family:'Cinzel',serif; font-size:1rem; font-weight:700; letter-spacing:.16em; color:#e8f0f8; padding:13px 20px 11px; background:var(--bg-card); border-bottom:1px solid var(--border); text-transform:uppercase; }
 .cal-wrap  { overflow-x:auto; padding:16px; }
 .cal-table { border-collapse:collapse; font-size:.82rem; }
-.cal-date-hdr { font-family:'Cinzel',serif; font-size:.7rem; font-weight:700; letter-spacing:.1em; text-align:center; padding:10px 12px 8px; background:var(--bg-panel); color:var(--text-dim); border:1px solid var(--border); white-space:nowrap; text-transform:uppercase; min-width:250px; }
+.cal-date-hdr { font-family:'Cinzel',serif; font-size:.7rem; font-weight:700; letter-spacing:.1em; text-align:center; padding:10px 12px 8px; background:var(--bg-panel); color:var(--text-dim); border:1px solid var(--border); white-space:nowrap; text-transform:uppercase; min-width:200px; }
 .cal-date-hdr.today { background:rgba(58,154,189,.14); color:var(--rain-light); border-color:var(--rain-dim); box-shadow:inset 0 0 0 2px var(--rain-dim); }
 .cal-date-hdr .today-badge { display:block; font-size:.55rem; color:var(--rain); letter-spacing:.2em; margin-top:3px; }
-.cal-cell { vertical-align:top; padding:6px; border:1px solid var(--border); background:var(--bg-card); width:250px; min-width:250px; }
+.cal-cell { vertical-align:top; padding:6px; border:1px solid var(--border); background:var(--bg-card); width:200px; min-width:200px; }
 .cal-cell.today { background:rgba(58,154,189,.05); border-color:var(--rain-dim); }
 .cal-tourn { border-radius:6px; padding:8px 10px; margin-bottom:6px; border-left:3px solid; display:flex; flex-direction:column; gap:3px; }
 .cal-tourn:last-child { margin-bottom:0; }
@@ -237,8 +236,6 @@ header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); fon
 .cal-tprize  { font-size:.66rem; color:var(--gold); }
 .cal-buyin   { font-size:.66rem; color:var(--rain-light); font-family:'Cinzel',serif; font-weight:700; letter-spacing:.04em; }
 .cal-buyin-item { font-size:.62rem; color:var(--rain-light); padding-left:6px; }
-.cal-game    { font-size:.64rem; color:#b0c4d8; font-style:italic; letter-spacing:.03em; }
-.cal-game-item { font-size:.61rem; color:#b0c4d8; font-style:italic; padding-left:6px; }
 .cal-cell-lobby { margin-top:5px; padding-top:5px; border-top:1px solid var(--border); text-align:center; }
 .cal-cell-lobby a { font-family:'Cinzel',serif; font-size:.6rem; font-weight:700; letter-spacing:.1em; color:var(--rain-light); text-decoration:none; background:rgba(58,154,189,.08); border:1px solid var(--rain-dim); border-radius:10px; padding:3px 9px; transition:all .15s; display:inline-block; }
 .cal-cell-lobby a:hover { background:rgba(58,154,189,.2); border-color:var(--rain); }
@@ -363,11 +360,10 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
 <div id="section-announcements" style="display:none">
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill pill-reg active" id="fp-reg"   onclick="setFilter('registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-today"      id="fp-today" onclick="setFilter('today')">📅 TODAY</button>
-    <button class="filter-pill"                 id="fp-all"   onclick="setFilter('all')">ALL</button>
-    <button class="filter-pill pill-run"        id="fp-run"   onclick="setFilter('running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-ann"        id="fp-ann"   onclick="setFilter('announced')">🟡 UPCOMING</button>
+    <button class="filter-pill active"   id="fp-all" onclick="setFilter('all')">ALL</button>
+    <button class="filter-pill pill-run" id="fp-run" onclick="setFilter('running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="fp-reg" onclick="setFilter('registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="fp-ann" onclick="setFilter('announced')">🟡 UPCOMING</button>
     <span class="result-count" id="ann-count"></span>
   </div>
   <div class="cards-grid" id="ann-cards"></div>
@@ -382,11 +378,10 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   </div>
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill pill-reg active" id="lf-eb-reg"   onclick="setLeagueFilter('eb','registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-today"      id="lf-eb-today" onclick="setLeagueFilter('eb','today')">📅 TODAY</button>
-    <button class="filter-pill"                 id="lf-eb-all"   onclick="setLeagueFilter('eb','all')">ALL</button>
-    <button class="filter-pill pill-run"        id="lf-eb-run"   onclick="setLeagueFilter('eb','running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-ann"        id="lf-eb-ann"   onclick="setLeagueFilter('eb','announced')">🟡 UPCOMING</button>
+    <button class="filter-pill active"   id="lf-eb-all" onclick="setLeagueFilter('eb','all')">ALL</button>
+    <button class="filter-pill pill-run" id="lf-eb-run" onclick="setLeagueFilter('eb','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="lf-eb-reg" onclick="setLeagueFilter('eb','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="lf-eb-ann" onclick="setLeagueFilter('eb','announced')">🟡 UPCOMING</button>
     <span class="result-count" id="lf-eb-count"></span>
   </div>
   <div class="cards-grid" id="eb-cards"></div>
@@ -401,11 +396,10 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   </div>
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill pill-reg active" id="lf-li-reg"   onclick="setLeagueFilter('li','registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-today"      id="lf-li-today" onclick="setLeagueFilter('li','today')">📅 TODAY</button>
-    <button class="filter-pill"                 id="lf-li-all"   onclick="setLeagueFilter('li','all')">ALL</button>
-    <button class="filter-pill pill-run"        id="lf-li-run"   onclick="setLeagueFilter('li','running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-ann"        id="lf-li-ann"   onclick="setLeagueFilter('li','announced')">🟡 UPCOMING</button>
+    <button class="filter-pill active"   id="lf-li-all" onclick="setLeagueFilter('li','all')">ALL</button>
+    <button class="filter-pill pill-run" id="lf-li-run" onclick="setLeagueFilter('li','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="lf-li-reg" onclick="setLeagueFilter('li','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="lf-li-ann" onclick="setLeagueFilter('li','announced')">🟡 UPCOMING</button>
     <span class="result-count" id="lf-li-count"></span>
   </div>
   <div class="cards-grid" id="li-cards"></div>
@@ -508,11 +502,10 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   </div>
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill pill-reg active" id="lf-nw-reg"   onclick="setLeagueFilter('nw','registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-today"      id="lf-nw-today" onclick="setLeagueFilter('nw','today')">📅 TODAY</button>
-    <button class="filter-pill"                 id="lf-nw-all"   onclick="setLeagueFilter('nw','all')">ALL</button>
-    <button class="filter-pill pill-run"        id="lf-nw-run"   onclick="setLeagueFilter('nw','running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-ann"        id="lf-nw-ann"   onclick="setLeagueFilter('nw','announced')">🟡 UPCOMING</button>
+    <button class="filter-pill active"   id="lf-nw-all" onclick="setLeagueFilter('nw','all')">ALL</button>
+    <button class="filter-pill pill-run" id="lf-nw-run" onclick="setLeagueFilter('nw','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="lf-nw-reg" onclick="setLeagueFilter('nw','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="lf-nw-ann" onclick="setLeagueFilter('nw','announced')">🟡 UPCOMING</button>
     <span class="result-count" id="lf-nw-count"></span>
   </div>
   <div class="cards-grid" id="nw-cards"></div>
@@ -541,11 +534,10 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   </div>
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill pill-reg active" id="lf-wwwh-reg"   onclick="setLeagueFilter('wwwh','registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-today"      id="lf-wwwh-today" onclick="setLeagueFilter('wwwh','today')">📅 TODAY</button>
-    <button class="filter-pill"                 id="lf-wwwh-all"   onclick="setLeagueFilter('wwwh','all')">ALL</button>
-    <button class="filter-pill pill-run"        id="lf-wwwh-run"   onclick="setLeagueFilter('wwwh','running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-ann"        id="lf-wwwh-ann"   onclick="setLeagueFilter('wwwh','announced')">🟡 UPCOMING</button>
+    <button class="filter-pill active"   id="lf-wwwh-all" onclick="setLeagueFilter('wwwh','all')">ALL</button>
+    <button class="filter-pill pill-run" id="lf-wwwh-run" onclick="setLeagueFilter('wwwh','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-reg" id="lf-wwwh-reg" onclick="setLeagueFilter('wwwh','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-ann" id="lf-wwwh-ann" onclick="setLeagueFilter('wwwh','announced')">🟡 UPCOMING</button>
     <span class="result-count" id="lf-wwwh-count"></span>
   </div>
   <div class="cards-grid" id="wwwh-cards"></div>
@@ -641,8 +633,8 @@ const TC = {
 // ── State ─────────────────────────────────────────────────────
 let allT         = [];   // all tournaments
 let activeTab    = 'newyork';
-let activeFilter = 'registering';
-let leagueFilters = { nw:'registering', wwwh:'registering', eb:'registering', li:'registering' };
+let activeFilter = 'all';
+let leagueFilters = { nw:'all', wwwh:'all', eb:'all', li:'all' };
 let calFilters    = { newyork:'all', seattle:'all', chicago:'all', london:'all', sydney:'all', zaf:'all', deutschland:'all', espanol:'all', francais:'all' };
 let refreshTimer, countdownTimer, nextAt;
 
@@ -677,7 +669,7 @@ function fmtTime(iso, tz, loc) {
 }
 
 function fmtLocalTime(iso) {
-  try { return new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',weekday:'short',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date(iso)); }
+  try { return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',weekday:'short',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date(iso)); }
   catch(e){ return ''; }
 }
 
@@ -703,7 +695,7 @@ function fmtChips(n) {
 }
 
 function buyInStr(t) {
-  if (!t.buyIn || t.buyIn <= 0) return 'Free';
+  if (!t.buyIn || t.buyIn <= 0) return '';
   let s = fmtChips(t.buyIn);
   if (t.buyInFee > 0) s += ' + ' + fmtChips(t.buyInFee) + ' fee';
   return s;
@@ -872,24 +864,17 @@ function renderActive() {
 // ── Status filter ─────────────────────────────────────────────
 function setFilter(f) {
   activeFilter = f;
-  ['today','all','run','reg','ann'].forEach(function(id){
+  ['all','run','reg','ann'].forEach(function(id){
     const el = document.getElementById('fp-'+id);
     if (el) el.classList.remove('active');
   });
-  const map = { today:'today', all:'all', running:'run', registering:'reg', announced:'ann' };
-  const el = document.getElementById('fp-'+(map[f]||'today'));
+  const map = {all:'all',running:'run',registering:'reg',announced:'ann'};
+  const el = document.getElementById('fp-'+(map[f]||'all'));
   if (el) el.classList.add('active');
   renderAnnouncements();
 }
 
 function applyFilter(list) {
-  if (activeFilter === 'today') {
-    const todayStr = new Date().toLocaleDateString('en-CA'); // 'YYYY-MM-DD' in local time
-    return list.filter(function(t){
-      const d = new Date(t.start);
-      return d.toLocaleDateString('en-CA') === todayStr;
-    });
-  }
   if (activeFilter==='all') return list;
   return list.filter(function(t){
     const s = (t.status||'').toLowerCase();
@@ -917,11 +902,11 @@ function setCalFilter(tab, f) {
 function setLeagueFilter(tab, f) {
   leagueFilters[tab] = f;
   // Update pill active states for this tab
-  ['today','all','run','reg','ann'].forEach(function(id){
+  ['all','run','reg','ann'].forEach(function(id){
     const el = document.getElementById('lf-'+tab+'-'+id);
     if (el) el.classList.remove('active');
   });
-  const idMap = { today:'today', all:'all', running:'run', registering:'reg', announced:'ann' };
+  const idMap = { all:'all', running:'run', registering:'reg', announced:'ann' };
   const el = document.getElementById('lf-'+tab+'-'+(idMap[f]||'all'));
   if (el) el.classList.add('active');
   renderLeague(
@@ -934,16 +919,10 @@ function setLeagueFilter(tab, f) {
 function applyLeagueFilter(list, tab) {
   const f = leagueFilters[tab] || 'all';
   if (f==='all') return list;
-  if (f==='today') {
-    const todayStr = new Date().toLocaleDateString('en-CA');
-    return list.filter(function(t){
-      return t.start && t.start.slice(0,10) === todayStr;
-    });
-  }
   return list.filter(function(t){
     const s = (t.status||'').toLowerCase();
     if (f==='running')     return s==='running';
-    if (f==='registering') return s==='registering' || s==='announced';
+    if (f==='registering') return s==='registering';
     if (f==='announced')   return s==='announced';
     return true;
   });
@@ -965,7 +944,6 @@ function buildCard(t, linkText, linkHref, linkClass) {
         '<div class="card-meta">',
           '<div class="card-meta-row"><span class="mi">📅</span>'+esc(tm)+'</div>',
           '<div class="card-meta-row"><span class="mi">🎮</span>'+esc(t.game||'Poker')+'</div>',
-          '<div class="card-meta-row"><span class="mi">🎟</span>Buy-in: '+esc(buyInStr(t))+'</div>',
           pz ? '<div class="card-meta-row"><span class="mi">💰</span>'+esc(pz)+'</div>' : '',
         '</div>',
       '</div>',
@@ -1094,36 +1072,24 @@ function renderCalendar(tabKey, containerId) {
       h += '<div class="cal-time">'+esc(g.tm)+'</div>';
       h += '<div class="cal-tleague" style="color:'+c.tx+'">'+esc(g.league)+'</div>';
 
-      // Check if all games in the group share the same buy-in / game type
-      const firstBI    = buyInStr(g.items[0]);
-      const allSameBI  = g.items.every(function(t){ return buyInStr(t) === firstBI; });
-      const firstGame  = (g.items[0].game || '').trim();
-      const allSameGame = firstGame && g.items.every(function(t){ return (t.game||'').trim() === firstGame; });
-
-      // Shared game type shown once after league name (if uniform)
-      if (allSameGame) {
-        h += '<div class="cal-game">♠ '+esc(firstGame)+'</div>';
-      }
+      // Check if all games in the group share the same buy-in
+      const firstBI  = buyInStr(g.items[0]);
+      const allSameBI = g.items.every(function(t){ return buyInStr(t) === firstBI; });
 
       // One link row per game in the group
       g.items.forEach(function(t){
-        const dName  = trName(t.name, lang);
-        const bi     = buyInStr(t);
-        const gType  = (t.game || '').trim();
+        const dName = trName(t.name, lang);
+        const bi    = buyInStr(t);
         h += '<div class="cal-tname"><a href="'+esc(t.link)+'" target="_blank">'+esc(dName)+
              '<span class="cal-link-label">↗ Link to Game</span></a></div>';
-        // Per-game game type only when they differ within the group
-        if (!allSameGame && gType) {
-          h += '<div class="cal-game-item">♠ '+esc(gType)+'</div>';
-        }
         // Per-game buy-in only when they differ within the group
-        if (!allSameBI) {
+        if (!allSameBI && bi) {
           h += '<div class="cal-buyin-item">⬥ '+esc(bi)+'</div>';
         }
       });
 
-      // Shared buy-in shown once after all game links (always — "Free" when no chips)
-      if (allSameBI) {
+      // Shared buy-in shown once after all game links
+      if (allSameBI && firstBI) {
         h += '<div class="cal-buyin">Buy-in: '+esc(firstBI)+'</div>';
       }
 
@@ -1250,7 +1216,9 @@ function initTheme() {
   try { saved = localStorage.getItem('mwa_theme') || 'rain'; } catch(e) {}
   setTheme(saved);
 }
-
+<div style="text-align: center; margin-top: 20px;">
+  <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Frainsplace.github.io%2Fleague-schedules&count_bg=%234CAF50&title_bg=%23333333&icon=dataexplorer.svg&icon_color=%23FFFFFF&title=Visits&edge_flat=true" alt="App Visits"/>
+</div>
 // ── Init ──────────────────────────────────────────────────────
 window.addEventListener('load', function(){ initTheme(); loadData(false); });
 </script>
