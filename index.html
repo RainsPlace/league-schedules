@@ -31,44 +31,55 @@ html[data-theme="rain"] {
   --border:#20304a; --border-gold:#3a2e10;
 }
 
-/* Ocean — rich navy blue backgrounds with teal-green accents */
-html[data-theme="ocean"] {
-  --:#185FA5; ---light:#4a90d9; ---dim:#0c3660;
-  --gold:#1D9E75; --gold-light:#50c8a0; --gold-dim:#0a5040;
-  --bg-dark:#08203a; --bg-card:#0d2a4c; --bg-panel:#12325a;
-  --bg-row:#183a68; --bg-row-alt:#12325a;
-  --text-main:#ccdcf0; --text-dim:#6898c8; --text-muted:#3a5880;
-  --border:#1e3a60; --border-gold:#0a2c48;
+/* Ocean Breeze — near-black navy bg, turquoise/cyan accents */
+html[data-theme="oceanbreeze"] {
+  --rain:#00b4d8; --rain-light:#caf0f8; --rain-dim:#0077b6;
+  --gold:#90e0ef; --gold-light:#caf0f8; --gold-dim:#005a80;
+  --bg-dark:#01020e; --bg-card:#020620; --bg-panel:#030b2e;
+  --bg-row:#05143c; --bg-row-alt:#030b2e;
+  --text-main:#caf0f8; --text-dim:#90e0ef; --text-muted:#3a7090;
+  --border:#0a2044; --border-gold:#041528;
 }
 
-/* Forest — deep green backgrounds with amber accents */
-html[data-theme="forest"] {
-  --:#3B6D11; ---light:#72a840; ---dim:#1e3808;
-  --gold:#BA7517; --gold-light:#e0a050; --gold-dim:#6a4008;
-  --bg-dark:#081a04; --bg-card:#0e2408; --bg-panel:#132c0c;
-  --bg-row:#183610; --bg-row-alt:#132c0c;
-  --text-main:#d8e8d0; --text-dim:#78a058; --text-muted:#406030;
-  --border:#1e3814; --border-gold:#3a2808;
+/* Ocean Blue Serenity — deep indigo-navy bg, sky-aqua accents */
+html[data-theme="oceanserenity"] {
+  --rain:#0077b6; --rain-light:#48cae4; --rain-dim:#023e8a;
+  --gold:#0096c7; --gold-light:#ade8f4; --gold-dim:#03045e;
+  --bg-dark:#010214; --bg-card:#030820; --bg-panel:#040e2e;
+  --bg-row:#071640; --bg-row-alt:#040e2e;
+  --text-main:#caf0f8; --text-dim:#90e0ef; --text-muted:#2c6090;
+  --border:#0c1e44; --border-gold:#040e2c;
 }
 
-/* Sunset — warm amber-brown backgrounds with rose accents */
-html[data-theme="sunset"] {
-  --:#D85A30; ---light:#f08060; ---dim:#702010;
-  --gold:#993556; --gold-light:#c06080; --gold-dim:#501828;
-  --bg-dark:#221008; --bg-card:#2c1408; --bg-panel:#36180a;
-  --bg-row:#401e0c; --bg-row-alt:#36180a;
-  --text-main:#f0dcd8; --text-dim:#c08060; --text-muted:#804838;
-  --border:#3c2010; --border-gold:#381210;
+/* Vivid Nightfall — white/lavender bg, deep violet/indigo accents, dark text */
+html[data-theme="vividnightfall"] {
+  --rain:#7b2cbf; --rain-light:#3c096c; --rain-dim:#9d4edd;
+  --gold:#5a189a; --gold-light:#3c096c; --gold-dim:#c77dff;
+  --bg-dark:#f8f4ff; --bg-card:#ffffff; --bg-panel:#f0e8ff;
+  --bg-row:#e8daff; --bg-row-alt:#f0e8ff;
+  --text-main:#10002b; --text-dim:#3c096c; --text-muted:#7b2cbf;
+  --border:#c77dff; --border-gold:#e0aaff;
+}
+/* Vivid Nightfall overrides for elements with hardcoded dark values */
+html[data-theme="vividnightfall"] header {
+  background: linear-gradient(180deg, #e8daff 0%, #f8f4ff 100%);
+  border-bottom-color: #c77dff;
+}
+html[data-theme="vividnightfall"] header h1 {
+  text-shadow: 0 1px 3px rgba(60,9,108,.2);
+}
+html[data-theme="vividnightfall"] .sidebar-section-label {
+  color: #3c096c;
 }
 
-/* Lavender — rich purple backgrounds with blue accents */
-html[data-theme="lavender"] {
-  --:#534AB7; ---light:#8880e0; ---dim:#281870;
-  --gold:#185FA5; --gold-light:#5090d8; --gold-dim:#082848;
-  --bg-dark:#0e0a28; --bg-card:#141034; --bg-panel:#1a1440;
-  --bg-row:#201a4c; --bg-row-alt:#1a1440;
-  --text-main:#e0d8f8; --text-dim:#9080c8; --text-muted:#504080;
-  --border:#261e50; --border-gold:#180c40;
+/* Blue Serenity — near-black bg, pale periwinkle/lavender text accents */
+html[data-theme="blueserenity"] {
+  --rain:#abc4ff; --rain-light:#d7e3fc; --rain-dim:#7090c0;
+  --gold:#c1d3fe; --gold-light:#edf2fb; --gold-dim:#6080a8;
+  --bg-dark:#06080e; --bg-card:#0c1020; --bg-panel:#121828;
+  --bg-row:#181e30; --bg-row-alt:#121828;
+  --text-main:#e2eafc; --text-dim:#b6ccfe; --text-muted:#5870a0;
+  --border:#1c2640; --border-gold:#141c30;
 }
 
 /* Slate — warm mid-grey backgrounds with champagne accents */
@@ -81,24 +92,35 @@ html[data-theme="slate"] {
   --border:#383838; --border-gold:#302808;
 }
 
-/* Cherry — rich dark-red backgrounds with pink accents */
-html[data-theme="cherry"] {
-  --rain:#A32D2D; --rain-light:#d86060; --rain-dim:#501010;
-  --gold:#D4537E; --gold-light:#f080a8; --gold-dim:#701830;
-  --bg-dark:#280808; --bg-card:#320a0a; --bg-panel:#3c0c0c;
-  --bg-row:#481010; --bg-row-alt:#3c0c0c;
-  --text-main:#f0d8dc; --text-dim:#c07080; --text-muted:#804050;
-  --border:#401010; --border-gold:#340810;
+/* Cherry Blossom Bloom — near-black red bg, rosy pink accents */
+html[data-theme="cherryblossom"] {
+  --rain:#ff4d6d; --rain-light:#ffb3c1; --rain-dim:#c9184a;
+  --gold:#ff758f; --gold-light:#ffccd5; --gold-dim:#a4133c;
+  --bg-dark:#0e0206; --bg-card:#180408; --bg-panel:#200510;
+  --bg-row:#2a0614; --bg-row-alt:#200510;
+  --text-main:#ffccd5; --text-dim:#ff8fa3; --text-muted:#904060;
+  --border:#40081a; --border-gold:#30040e;
 }
 
-/* Dark Cherry — deep warm-red backgrounds with bright red/pink accents */
-html[data-theme="darkcherry"] {
-  --rain:#ff6b6b; --rain-light:#ff9898; --rain-dim:#8b1a1a;
-  --gold:#ff7aa2; --gold-light:#ffaac8; --gold-dim:#8b1a3a;
-  --bg-dark:#2a1010; --bg-card:#341414; --bg-panel:#3e1818;
-  --bg-row:#481c1c; --bg-row-alt:#3e1818;
-  --text-main:#f5f0f0; --text-dim:#d09090; --text-muted:#906060;
-  --border:#501c1c; --border-gold:#441010;
+/* Light Steel — light platinum/grey bg, charcoal accents, dark text */
+html[data-theme="lightsteel"] {
+  --rain:#495057; --rain-light:#343a40; --rain-dim:#6c757d;
+  --gold:#6c757d; --gold-light:#343a40; --gold-dim:#adb5bd;
+  --bg-dark:#f0f1f3; --bg-card:#ffffff; --bg-panel:#e9ecef;
+  --bg-row:#dee2e6; --bg-row-alt:#e9ecef;
+  --text-main:#212529; --text-dim:#495057; --text-muted:#6c757d;
+  --border:#ced4da; --border-gold:#dee2e6;
+}
+/* Light Steel overrides for elements with hardcoded dark values */
+html[data-theme="lightsteel"] header {
+  background: linear-gradient(180deg, #dee2e6 0%, #f0f1f3 100%);
+  border-bottom-color: #ced4da;
+}
+html[data-theme="lightsteel"] header h1 {
+  text-shadow: 0 1px 3px rgba(0,0,0,.15);
+}
+html[data-theme="lightsteel"] .sidebar-section-label {
+  color: #343a40;
 }
 
 /* ── Theme selector control ─────────────────────────────────── */
@@ -177,7 +199,8 @@ header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); fon
 .filter-label { font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:.18em; color:var(--text-muted); flex-shrink:0; white-space:nowrap; }
 .filter-pill { font-family:'Cinzel',serif; font-size:.66rem; font-weight:700; letter-spacing:.1em; padding:5px 14px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer; white-space:nowrap; transition:all .2s; flex-shrink:0; }
 .filter-pill:hover { border-color:var(--rain-dim); color:var(--rain-light); }
-.filter-pill.active     { background:rgba(112,128,144,.15); border-color:var(--text-dim);   color:var(--text-main); }
+.filter-pill.active           { background:rgba(112,128,144,.15); border-color:var(--text-dim);   color:var(--text-main); }
+.filter-pill.pill-today.active{ background:rgba(153,102,204,.18); border-color:#9966cc;           color:#c499ff; }
 .filter-pill.pill-run.active  { background:rgba(76,175,80,.15);  border-color:var(--green);      color:var(--green-light); }
 .filter-pill.pill-reg.active  { background:rgba(58,154,189,.18); border-color:var(--rain);       color:var(--rain-light); }
 .filter-pill.pill-ann.active  { background:rgba(201,168,76,.15); border-color:var(--gold);       color:var(--gold-light); }
@@ -188,7 +211,7 @@ header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); fon
 .ann-card { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s,box-shadow .15s; }
 .ann-card:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,.55); }
 .card-head { padding:9px 13px 8px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:8px; }
-.card-league { font-family:'Cinzel',serif; font-size:.62rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+.card-league { font-family:'Cinzel',serif; font-size:.74rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
 .card-status { font-family:'Cinzel',serif; font-size:.58rem; font-weight:700; letter-spacing:.08em; padding:2px 8px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
 .st-running     { background:rgba(76,175,80,.2);  color:var(--green-light); border:1px solid var(--green-dim); }
 .st-registering { background:rgba(58,154,189,.2); color:var(--rain-light);  border:1px solid var(--rain-dim);  }
@@ -215,13 +238,13 @@ header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); fon
 
 /* ── CALENDAR VIEW ── */
 .cal-section { padding:0 0 40px; }
-.cal-tz-label { font-family:'Cinzel',serif; font-size:1rem; font-weight:700; letter-spacing:.16em; color:#e8f0f8; padding:13px 20px 11px; background:var(--bg-card); border-bottom:1px solid var(--border); text-transform:uppercase; }
+.cal-tz-label { font-family:'Cinzel',serif; font-size:1rem; font-weight:700; letter-spacing:.16em; color:var(--text-main); padding:13px 20px 11px; background:var(--bg-card); border-bottom:1px solid var(--border); text-transform:uppercase; }
 .cal-wrap  { overflow-x:auto; padding:16px; }
 .cal-table { border-collapse:collapse; font-size:.82rem; }
-.cal-date-hdr { font-family:'Cinzel',serif; font-size:.7rem; font-weight:700; letter-spacing:.1em; text-align:center; padding:10px 12px 8px; background:var(--bg-panel); color:var(--text-dim); border:1px solid var(--border); white-space:nowrap; text-transform:uppercase; min-width:200px; }
+.cal-date-hdr { font-family:'Cinzel',serif; font-size:.7rem; font-weight:700; letter-spacing:.1em; text-align:center; padding:10px 12px 8px; background:var(--bg-panel); color:var(--text-dim); border:1px solid var(--border); white-space:nowrap; text-transform:uppercase; min-width:250px; }
 .cal-date-hdr.today { background:rgba(58,154,189,.14); color:var(--rain-light); border-color:var(--rain-dim); box-shadow:inset 0 0 0 2px var(--rain-dim); }
 .cal-date-hdr .today-badge { display:block; font-size:.55rem; color:var(--rain); letter-spacing:.2em; margin-top:3px; }
-.cal-cell { vertical-align:top; padding:6px; border:1px solid var(--border); background:var(--bg-card); width:200px; min-width:200px; }
+.cal-cell { vertical-align:top; padding:6px; border:1px solid var(--border); background:var(--bg-card); width:250px; min-width:250px; }
 .cal-cell.today { background:rgba(58,154,189,.05); border-color:var(--rain-dim); }
 .cal-tourn { border-radius:6px; padding:8px 10px; margin-bottom:6px; border-left:3px solid; display:flex; flex-direction:column; gap:3px; }
 .cal-tourn:last-child { margin-bottom:0; }
@@ -230,12 +253,14 @@ header h2 { font-family:'Cinzel',serif; font-size:clamp(.65rem,1.8vw,.9rem); fon
 .cal-tname a { color:var(--green); text-decoration:none; transition:color .15s; }
 .cal-tname a:hover { color:var(--green-light); text-decoration:underline; }
 .cal-link-label { font-family:'Cinzel',serif; font-size:.5rem; font-weight:700; letter-spacing:.08em; color:var(--green); opacity:.7; margin-left:4px; vertical-align:middle; white-space:nowrap; }
-.cal-tleague { font-size:.66rem; font-style:italic; margin-top:1px; }
+.cal-tleague { font-size:.79rem; font-style:italic; margin-top:1px; }
 .cal-tgame   { font-size:.78rem; color:#ffffff; }
 .cal-tstatus { display:inline-block; font-family:'Cinzel',serif; font-size:.54rem; font-weight:700; letter-spacing:.05em; padding:1px 6px; border-radius:8px; margin-top:2px; }
 .cal-tprize  { font-size:.66rem; color:var(--gold); }
 .cal-buyin   { font-size:.66rem; color:var(--rain-light); font-family:'Cinzel',serif; font-weight:700; letter-spacing:.04em; }
 .cal-buyin-item { font-size:.62rem; color:var(--rain-light); padding-left:6px; }
+.cal-game    { font-size:.64rem; color:#b0c4d8; font-style:italic; letter-spacing:.03em; }
+.cal-game-item { font-size:.61rem; color:#b0c4d8; font-style:italic; padding-left:6px; }
 .cal-cell-lobby { margin-top:5px; padding-top:5px; border-top:1px solid var(--border); text-align:center; }
 .cal-cell-lobby a { font-family:'Cinzel',serif; font-size:.6rem; font-weight:700; letter-spacing:.1em; color:var(--rain-light); text-decoration:none; background:rgba(58,154,189,.08); border:1px solid var(--rain-dim); border-radius:10px; padding:3px 9px; transition:all .15s; display:inline-block; }
 .cal-cell-lobby a:hover { background:rgba(58,154,189,.2); border-color:var(--rain); }
@@ -295,7 +320,7 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
 <header>
   <div class="rain-bar"></div>
   <h1>☔ PRIVATE LEAGUE SCHEDULES 🌧️</h1>
-  <h2>18 Leagues &nbsp;·&nbsp; Multiple Time Zones &nbsp;·&nbsp; Live Updates</h2>
+  <h2>19 Leagues &nbsp;·&nbsp; Multiple Time Zones &nbsp;·&nbsp; Live Updates</h2>
   <div class="header-ornament">♠ ♥ ♦ ♣ ☔ ♣ ♦ ♥ ♠</div>
   <div class="hdr-row">
     <div class="live-badge"><span class="live-dot"></span>LIVE DATA</div>
@@ -303,14 +328,14 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
     <div class="theme-sel-wrap">
       <span class="theme-sel-label">🎨 THEME</span>
       <select class="theme-sel" id="themeSelect" onchange="setTheme(this.value)">
-        <option value="rain">☔ Rain (Default)</option>
-        <option value="ocean">🌊 Ocean</option>
-        <option value="forest">🌲 Forest</option>
-        <option value="sunset">🌅 Sunset</option>
-        <option value="lavender">💜 Lavender</option>
+        <option value="rain">☔ (Default)</option>
+        <option value="oceanbreeze">🌊 Ocean Breeze</option>
+        <option value="oceanserenity">💧 Ocean Blue Serenity</option>
+        <option value="vividnightfall">🔮 Vivid Nightfall</option>
+        <option value="blueserenity">💙 Blue Serenity</option>
         <option value="slate">🪨 Slate</option>
-        <option value="cherry">🍒 Cherry</option>
-        <option value="darkcherry">🌙 Dark Cherry</option>
+        <option value="cherryblossom">🌸 Cherry Blossom</option>
+        <option value="lightsteel">🩶 Light Steel</option>
       </select>
     </div>
   </div>
@@ -360,10 +385,11 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
 <div id="section-announcements" style="display:none">
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill active"   id="fp-all" onclick="setFilter('all')">ALL</button>
-    <button class="filter-pill pill-run" id="fp-run" onclick="setFilter('running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-reg" id="fp-reg" onclick="setFilter('registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-ann" id="fp-ann" onclick="setFilter('announced')">🟡 UPCOMING</button>
+    <button class="filter-pill pill-reg active" id="fp-reg"   onclick="setFilter('registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-today"      id="fp-today" onclick="setFilter('today')">📅 TODAY</button>
+    <button class="filter-pill"                 id="fp-all"   onclick="setFilter('all')">ALL</button>
+    <button class="filter-pill pill-run"        id="fp-run"   onclick="setFilter('running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-ann"        id="fp-ann"   onclick="setFilter('announced')">🟡 UPCOMING</button>
     <span class="result-count" id="ann-count"></span>
   </div>
   <div class="cards-grid" id="ann-cards"></div>
@@ -378,10 +404,11 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   </div>
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill active"   id="lf-eb-all" onclick="setLeagueFilter('eb','all')">ALL</button>
-    <button class="filter-pill pill-run" id="lf-eb-run" onclick="setLeagueFilter('eb','running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-reg" id="lf-eb-reg" onclick="setLeagueFilter('eb','registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-ann" id="lf-eb-ann" onclick="setLeagueFilter('eb','announced')">🟡 UPCOMING</button>
+    <button class="filter-pill pill-reg active" id="lf-eb-reg"   onclick="setLeagueFilter('eb','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-today"      id="lf-eb-today" onclick="setLeagueFilter('eb','today')">📅 TODAY</button>
+    <button class="filter-pill"                 id="lf-eb-all"   onclick="setLeagueFilter('eb','all')">ALL</button>
+    <button class="filter-pill pill-run"        id="lf-eb-run"   onclick="setLeagueFilter('eb','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-ann"        id="lf-eb-ann"   onclick="setLeagueFilter('eb','announced')">🟡 UPCOMING</button>
     <span class="result-count" id="lf-eb-count"></span>
   </div>
   <div class="cards-grid" id="eb-cards"></div>
@@ -396,10 +423,11 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   </div>
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill active"   id="lf-li-all" onclick="setLeagueFilter('li','all')">ALL</button>
-    <button class="filter-pill pill-run" id="lf-li-run" onclick="setLeagueFilter('li','running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-reg" id="lf-li-reg" onclick="setLeagueFilter('li','registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-ann" id="lf-li-ann" onclick="setLeagueFilter('li','announced')">🟡 UPCOMING</button>
+    <button class="filter-pill pill-reg active" id="lf-li-reg"   onclick="setLeagueFilter('li','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-today"      id="lf-li-today" onclick="setLeagueFilter('li','today')">📅 TODAY</button>
+    <button class="filter-pill"                 id="lf-li-all"   onclick="setLeagueFilter('li','all')">ALL</button>
+    <button class="filter-pill pill-run"        id="lf-li-run"   onclick="setLeagueFilter('li','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-ann"        id="lf-li-ann"   onclick="setLeagueFilter('li','announced')">🟡 UPCOMING</button>
     <span class="result-count" id="lf-li-count"></span>
   </div>
   <div class="cards-grid" id="li-cards"></div>
@@ -502,10 +530,11 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   </div>
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill active"   id="lf-nw-all" onclick="setLeagueFilter('nw','all')">ALL</button>
-    <button class="filter-pill pill-run" id="lf-nw-run" onclick="setLeagueFilter('nw','running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-reg" id="lf-nw-reg" onclick="setLeagueFilter('nw','registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-ann" id="lf-nw-ann" onclick="setLeagueFilter('nw','announced')">🟡 UPCOMING</button>
+    <button class="filter-pill pill-reg active" id="lf-nw-reg"   onclick="setLeagueFilter('nw','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-today"      id="lf-nw-today" onclick="setLeagueFilter('nw','today')">📅 TODAY</button>
+    <button class="filter-pill"                 id="lf-nw-all"   onclick="setLeagueFilter('nw','all')">ALL</button>
+    <button class="filter-pill pill-run"        id="lf-nw-run"   onclick="setLeagueFilter('nw','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-ann"        id="lf-nw-ann"   onclick="setLeagueFilter('nw','announced')">🟡 UPCOMING</button>
     <span class="result-count" id="lf-nw-count"></span>
   </div>
   <div class="cards-grid" id="nw-cards"></div>
@@ -534,10 +563,11 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
   </div>
   <div class="filter-bar">
     <span class="filter-label">STATUS ▶</span>
-    <button class="filter-pill active"   id="lf-wwwh-all" onclick="setLeagueFilter('wwwh','all')">ALL</button>
-    <button class="filter-pill pill-run" id="lf-wwwh-run" onclick="setLeagueFilter('wwwh','running')">🟢 RUNNING</button>
-    <button class="filter-pill pill-reg" id="lf-wwwh-reg" onclick="setLeagueFilter('wwwh','registering')">🔵 REGISTERING</button>
-    <button class="filter-pill pill-ann" id="lf-wwwh-ann" onclick="setLeagueFilter('wwwh','announced')">🟡 UPCOMING</button>
+    <button class="filter-pill pill-reg active" id="lf-wwwh-reg"   onclick="setLeagueFilter('wwwh','registering')">🔵 REGISTERING</button>
+    <button class="filter-pill pill-today"      id="lf-wwwh-today" onclick="setLeagueFilter('wwwh','today')">📅 TODAY</button>
+    <button class="filter-pill"                 id="lf-wwwh-all"   onclick="setLeagueFilter('wwwh','all')">ALL</button>
+    <button class="filter-pill pill-run"        id="lf-wwwh-run"   onclick="setLeagueFilter('wwwh','running')">🟢 RUNNING</button>
+    <button class="filter-pill pill-ann"        id="lf-wwwh-ann"   onclick="setLeagueFilter('wwwh','announced')">🟡 UPCOMING</button>
     <span class="result-count" id="lf-wwwh-count"></span>
   </div>
   <div class="cards-grid" id="wwwh-cards"></div>
@@ -564,7 +594,7 @@ footer { text-align:center; padding:22px; color:var(--text-muted); font-size:.8r
 
 <footer>
   <span class="fr">☔ ♠ ♥ ♦ ♣ ☔</span>
-  Rain's Private League Schedules &nbsp;·&nbsp; Auto-refreshes every 30 minutes
+  Private League Schedules &nbsp;·&nbsp; Auto-refreshes every 30 minutes
 </footer>
 
 </div><!-- /.main-content -->
@@ -633,8 +663,8 @@ const TC = {
 // ── State ─────────────────────────────────────────────────────
 let allT         = [];   // all tournaments
 let activeTab    = 'newyork';
-let activeFilter = 'all';
-let leagueFilters = { nw:'all', wwwh:'all', eb:'all', li:'all' };
+let activeFilter = 'registering';
+let leagueFilters = { nw:'registering', wwwh:'registering', eb:'registering', li:'registering' };
 let calFilters    = { newyork:'all', seattle:'all', chicago:'all', london:'all', sydney:'all', zaf:'all', deutschland:'all', espanol:'all', francais:'all' };
 let refreshTimer, countdownTimer, nextAt;
 
@@ -669,7 +699,7 @@ function fmtTime(iso, tz, loc) {
 }
 
 function fmtLocalTime(iso) {
-  try { return new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',weekday:'short',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date(iso)); }
+  try { return new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',weekday:'short',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date(iso)); }
   catch(e){ return ''; }
 }
 
@@ -695,7 +725,7 @@ function fmtChips(n) {
 }
 
 function buyInStr(t) {
-  if (!t.buyIn || t.buyIn <= 0) return '';
+  if (!t.buyIn || t.buyIn <= 0) return 'Free';
   let s = fmtChips(t.buyIn);
   if (t.buyInFee > 0) s += ' + ' + fmtChips(t.buyInFee) + ' fee';
   return s;
@@ -864,17 +894,24 @@ function renderActive() {
 // ── Status filter ─────────────────────────────────────────────
 function setFilter(f) {
   activeFilter = f;
-  ['all','run','reg','ann'].forEach(function(id){
+  ['today','all','run','reg','ann'].forEach(function(id){
     const el = document.getElementById('fp-'+id);
     if (el) el.classList.remove('active');
   });
-  const map = {all:'all',running:'run',registering:'reg',announced:'ann'};
-  const el = document.getElementById('fp-'+(map[f]||'all'));
+  const map = { today:'today', all:'all', running:'run', registering:'reg', announced:'ann' };
+  const el = document.getElementById('fp-'+(map[f]||'today'));
   if (el) el.classList.add('active');
   renderAnnouncements();
 }
 
 function applyFilter(list) {
+  if (activeFilter === 'today') {
+    const todayStr = new Date().toLocaleDateString('en-CA'); // 'YYYY-MM-DD' in local time
+    return list.filter(function(t){
+      const d = new Date(t.start);
+      return d.toLocaleDateString('en-CA') === todayStr;
+    });
+  }
   if (activeFilter==='all') return list;
   return list.filter(function(t){
     const s = (t.status||'').toLowerCase();
@@ -902,11 +939,11 @@ function setCalFilter(tab, f) {
 function setLeagueFilter(tab, f) {
   leagueFilters[tab] = f;
   // Update pill active states for this tab
-  ['all','run','reg','ann'].forEach(function(id){
+  ['today','all','run','reg','ann'].forEach(function(id){
     const el = document.getElementById('lf-'+tab+'-'+id);
     if (el) el.classList.remove('active');
   });
-  const idMap = { all:'all', running:'run', registering:'reg', announced:'ann' };
+  const idMap = { today:'today', all:'all', running:'run', registering:'reg', announced:'ann' };
   const el = document.getElementById('lf-'+tab+'-'+(idMap[f]||'all'));
   if (el) el.classList.add('active');
   renderLeague(
@@ -919,13 +956,74 @@ function setLeagueFilter(tab, f) {
 function applyLeagueFilter(list, tab) {
   const f = leagueFilters[tab] || 'all';
   if (f==='all') return list;
+  if (f==='today') {
+    const todayStr = new Date().toLocaleDateString('en-CA');
+    return list.filter(function(t){
+      return t.start && t.start.slice(0,10) === todayStr;
+    });
+  }
   return list.filter(function(t){
     const s = (t.status||'').toLowerCase();
     if (f==='running')     return s==='running';
-    if (f==='registering') return s==='registering';
+    if (f==='registering') return s==='registering' || s==='announced';
     if (f==='announced')   return s==='announced';
     return true;
   });
+}
+
+// ── Grouped card builder (Announcements: same league + time merged) ──────────
+function buildGroupCard(g) {
+  const first = g.items[0];
+  const c     = lc(g.league);
+  const pz    = prizeStr(first);
+  // Best status: running > registering > announced
+  var best = first.status || 'Announced';
+  g.items.forEach(function(t){
+    const s = (t.status||'').toLowerCase();
+    if (s==='running') best = t.status;
+    else if (s==='registering' && (best||'').toLowerCase()==='announced') best = t.status;
+  });
+  // Detect shared buy-in and game type across the group
+  const firstBI     = buyInStr(first);
+  const allSameBI   = g.items.every(function(t){ return buyInStr(t) === firstBI; });
+  const firstGame   = (first.game||'').trim();
+  const allSameGame = firstGame && g.items.every(function(t){ return (t.game||'').trim() === firstGame; });
+  // One row per tournament name; per-item details only when they differ
+  let names = '';
+  g.items.forEach(function(t){
+    names += '<div class="card-name"><a href="'+esc(t.link)+'" target="_blank">'+esc(t.name)+' <span class="cal-link-label">↗ Click to join</span></a></div>';
+    if (!allSameGame && (t.game||'').trim())
+      names += '<div class="card-meta-row" style="padding-left:14px"><span class="mi">🎮</span>'+esc(t.game)+'</div>';
+    if (!allSameBI)
+      names += '<div class="card-meta-row" style="padding-left:14px"><span class="mi">🎟</span>'+esc(buyInStr(t))+'</div>';
+  });
+  // Bye Table items folded in (start ~15 min later)
+  if (g.byeItems && g.byeItems.length) {
+    names += '<div class="card-meta-row" style="margin-top:7px;font-style:italic;opacity:.75"><span class="mi">⏱</span>'+esc(g.byeTm)+' — 15 min later:</div>';
+    g.byeItems.forEach(function(t){
+      names += '<div class="card-name"><a href="'+esc(t.link)+'" target="_blank">'+esc(t.name)+' <span class="cal-link-label">↗ Click to join</span></a></div>';
+    });
+  }
+  return [
+    '<div class="ann-card" style="border-color:'+c.bd+';background:'+c.bg+'">',
+      '<div class="card-head" style="border-bottom-color:'+c.bd+'">',
+        '<span class="card-league" style="color:'+c.tx+'">'+esc(g.league)+'</span>',
+        '<span class="card-status '+stClass(best)+'">'+esc(best)+'</span>',
+      '</div>',
+      '<div class="card-body">',
+        '<div class="card-meta">',
+          '<div class="card-meta-row"><span class="mi">📅</span>'+esc(g.tm)+'</div>',
+          allSameGame ? '<div class="card-meta-row"><span class="mi">🎮</span>'+esc(firstGame)+'</div>' : '',
+          allSameBI   ? '<div class="card-meta-row"><span class="mi">🎟</span>Buy-in: '+esc(firstBI)+'</div>' : '',
+          pz          ? '<div class="card-meta-row"><span class="mi">💰</span>'+esc(pz)+'</div>' : '',
+        '</div>',
+        names,
+      '</div>',
+      '<div class="card-foot">',
+        '<a class="card-lobby-link" href="'+esc(first.lobbyLink)+'" target="_blank">LOBBY ↗</a>',
+      '</div>',
+    '</div>'
+  ].join('');
 }
 
 // ── Shared card builder ───────────────────────────────────────
@@ -940,10 +1038,11 @@ function buildCard(t, linkText, linkHref, linkClass) {
         '<span class="card-status '+stClass(t.status)+'">'+esc(t.status)+'</span>',
       '</div>',
       '<div class="card-body">',
-        '<div class="card-name"><a href="'+esc(t.link)+'" target="_blank">'+esc(t.name)+'</a></div>',
+        '<div class="card-name"><a href="'+esc(t.link)+'" target="_blank">'+esc(t.name)+' <span class="cal-link-label">↗ Click to join</span></a></div>',
         '<div class="card-meta">',
           '<div class="card-meta-row"><span class="mi">📅</span>'+esc(tm)+'</div>',
           '<div class="card-meta-row"><span class="mi">🎮</span>'+esc(t.game||'Poker')+'</div>',
+          '<div class="card-meta-row"><span class="mi">🎟</span>Buy-in: '+esc(buyInStr(t))+'</div>',
           pz ? '<div class="card-meta-row"><span class="mi">💰</span>'+esc(pz)+'</div>' : '',
         '</div>',
       '</div>',
@@ -966,7 +1065,38 @@ function renderAnnouncements() {
     el.innerHTML = '<div class="empty-state"><div class="empty-icon">🌧️</div><div class="empty-text">NO TOURNAMENTS FOUND</div></div>';
     return;
   }
-  el.innerHTML = filtered.map(function(t){ return buildCard(t,'LOBBY',t.lobbyLink,'card-lobby-link'); }).join('');
+  // Group same-league same-start-time tournaments into one card
+  const groups = [];
+  const seen   = {};
+  filtered.forEach(function(t){
+    const gk = (t.leagueId||t.league) + '|' + t.start;
+    if (seen[gk] === undefined) {
+      seen[gk] = groups.length;
+      groups.push({ league: t.league, leagueId: t.leagueId, tm: fmtLocalTime(t.start),
+                    startMs: new Date(t.start).getTime(), lobbyLink: t.lobbyLink, items: [] });
+    }
+    groups[seen[gk]].items.push(t);
+  });
+  // Second pass: fold Bye Table groups (~15 min later, same league) into their main card
+  const absorbed = new Set();
+  groups.forEach(function(byeG, bi){
+    if (absorbed.has(bi)) return;
+    const isBye = byeG.items.every(function(t){ return /bye/i.test(t.name); });
+    if (!isBye) return;
+    const lid = byeG.leagueId || byeG.league;
+    groups.forEach(function(mainG, mi){
+      if (mi === bi || absorbed.has(mi)) return;
+      if ((mainG.leagueId || mainG.league) !== lid) return;
+      const diff = byeG.startMs - mainG.startMs;
+      if (diff >= 14 * 60 * 1000 && diff <= 16 * 60 * 1000) {
+        mainG.byeItems = byeG.items;
+        mainG.byeTm    = byeG.tm;
+        absorbed.add(bi);
+      }
+    });
+  });
+  const finalGroups = groups.filter(function(_, i){ return !absorbed.has(i); });
+  el.innerHTML = finalGroups.map(function(g){ return buildGroupCard(g); }).join('');
 }
 
 // ── Render: Single league ─────────────────────────────────────
@@ -1050,12 +1180,33 @@ function renderCalendar(tabKey, containerId) {
       const gk = t.leagueId + '|' + tm;
       if (groupIdx[gk] === undefined) {
         groupIdx[gk] = groups.length;
-        groups.push({ tm: tm, leagueId: t.leagueId, league: t.league, lobbyLink: t.lobbyLink, items: [] });
+        groups.push({ tm: tm, leagueId: t.leagueId, league: t.league, lobbyLink: t.lobbyLink,
+                      startMs: new Date(t.start).getTime(), items: [] });
       }
       groups[groupIdx[gk]].items.push(t);
     });
 
-    groups.forEach(function(g){
+    // Fold Bye Table groups (~15 min later, same league) into their main group
+    const calAbsorbed = new Set();
+    groups.forEach(function(byeG, bi){
+      if (calAbsorbed.has(bi)) return;
+      const isBye = byeG.items.every(function(t){ return /bye/i.test(t.name); });
+      if (!isBye) return;
+      const lid = byeG.leagueId || byeG.league;
+      groups.forEach(function(mainG, mi){
+        if (mi === bi || calAbsorbed.has(mi)) return;
+        if ((mainG.leagueId || mainG.league) !== lid) return;
+        const diff = byeG.startMs - mainG.startMs;
+        if (diff >= 14 * 60 * 1000 && diff <= 16 * 60 * 1000) {
+          mainG.byeItems = byeG.items;
+          mainG.byeTm    = byeG.tm;
+          calAbsorbed.add(bi);
+        }
+      });
+    });
+    const calGroups = groups.filter(function(_, i){ return !calAbsorbed.has(i); });
+
+    calGroups.forEach(function(g){
       const first = g.items[0];
       const c     = lc(g.league);
       // Best status: running > registering > announced
@@ -1072,29 +1223,51 @@ function renderCalendar(tabKey, containerId) {
       h += '<div class="cal-time">'+esc(g.tm)+'</div>';
       h += '<div class="cal-tleague" style="color:'+c.tx+'">'+esc(g.league)+'</div>';
 
-      // Check if all games in the group share the same buy-in
-      const firstBI  = buyInStr(g.items[0]);
-      const allSameBI = g.items.every(function(t){ return buyInStr(t) === firstBI; });
+      // Check if all games in the group share the same buy-in / game type
+      const firstBI    = buyInStr(g.items[0]);
+      const allSameBI  = g.items.every(function(t){ return buyInStr(t) === firstBI; });
+      const firstGame  = (g.items[0].game || '').trim();
+      const allSameGame = firstGame && g.items.every(function(t){ return (t.game||'').trim() === firstGame; });
+
+      // Shared game type shown once after league name (if uniform)
+      if (allSameGame) {
+        h += '<div class="cal-game">♠ '+esc(firstGame)+'</div>';
+      }
 
       // One link row per game in the group
       g.items.forEach(function(t){
-        const dName = trName(t.name, lang);
-        const bi    = buyInStr(t);
+        const dName  = trName(t.name, lang);
+        const bi     = buyInStr(t);
+        const gType  = (t.game || '').trim();
         h += '<div class="cal-tname"><a href="'+esc(t.link)+'" target="_blank">'+esc(dName)+
              '<span class="cal-link-label">↗ Link to Game</span></a></div>';
+        // Per-game game type only when they differ within the group
+        if (!allSameGame && gType) {
+          h += '<div class="cal-game-item">♠ '+esc(gType)+'</div>';
+        }
         // Per-game buy-in only when they differ within the group
-        if (!allSameBI && bi) {
+        if (!allSameBI) {
           h += '<div class="cal-buyin-item">⬥ '+esc(bi)+'</div>';
         }
       });
 
       // Shared buy-in shown once after all game links
-      if (allSameBI && firstBI) {
+      if (allSameBI) {
         h += '<div class="cal-buyin">Buy-in: '+esc(firstBI)+'</div>';
       }
 
       h += '<span class="cal-tstatus '+stClass(bestStatus)+'">'+esc(dStatus)+'</span>';
       if (pz) h += '<div class="cal-tprize">'+esc(pz)+'</div>';
+
+      // Bye Table items folded in (~15 min later, same league)
+      if (g.byeItems && g.byeItems.length) {
+        h += '<div class="cal-game" style="margin-top:6px;opacity:.75">⏱ '+esc(g.byeTm)+' — 15 min later:</div>';
+        g.byeItems.forEach(function(t){
+          const dName = trName(t.name, lang);
+          h += '<div class="cal-tname"><a href="'+esc(t.link)+'" target="_blank">'+esc(dName)+
+               '<span class="cal-link-label">↗ Link to Game</span></a></div>';
+        });
+      }
 
       // One lobby link per group at the bottom
       if (g.lobbyLink) {
@@ -1212,16 +1385,13 @@ function setTheme(name) {
 }
 
 function initTheme() {
-  let saved = 'rain';
-  try { saved = localStorage.getItem('mwa_theme') || 'rain'; } catch(e) {}
+  let saved = 'oceanbreeze';
+  try { saved = localStorage.getItem('mwa_theme') || 'oceanbreeze'; } catch(e) {}
   setTheme(saved);
 }
 
 // ── Init ──────────────────────────────────────────────────────
 window.addEventListener('load', function(){ initTheme(); loadData(false); });
 </script>
-  <div style="text-align: center; margin-top: 30px; padding-bottom: 30px;">
-  <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Frainsplace.github.io%2Fleague-schedules%2F&label=Visits&icon=cloud-drizzle&color=%23198754&message=&style=flat&tz=US%2FEastern" alt="App Visits">
-</div>
 </body>
 </html>
